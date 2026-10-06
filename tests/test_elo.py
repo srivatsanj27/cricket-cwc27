@@ -12,6 +12,7 @@ from cwc27.ratings.elo import (
     initial_rating,
     run_elo,
     update,
+    win_probability,
 )
 
 CONFIG = EloConfig(k=30.0, home_advantage=60.0)
@@ -197,6 +198,59 @@ def test_home_bonus_is_not_stored_in_ratings():
     new = update(ratings, make_match(winner="India"), CONFIG, home="India")
 
     assert new["India"] + new["Australia"] == pytest.approx(3000.0)
+
+
+# --- win_probability ----------------------------------------------------------
+
+
+def test_win_probability_is_even_between_equal_teams_at_a_neutral_venue():
+    ratings = {"India": 1500.0, "Australia": 1500.0}
+
+    assert win_probability(ratings, "India", "Australia", CONFIG) == pytest.approx(0.5)
+
+
+def test_win_probability_gives_the_home_side_the_bonus():
+    ratings = {"India": 1500.0, "Australia": 1500.0}
+    home_edge = 1 / (1 + 10 ** (-60 / 400))
+
+    at_india = win_probability(ratings, "India", "Australia", CONFIG, home="India")
+    at_australia = win_probability(ratings, "India", "Australia", CONFIG, home="Australia")
+
+    assert at_india == pytest.approx(home_edge)
+    assert at_australia == pytest.approx(1 - home_edge)
+
+
+def test_win_probability_uses_initial_ratings_for_unseen_teams():
+    p = win_probability({}, "India", "Namibia", CONFIG)
+
+    assert p == pytest.approx(1 / (1 + 10 ** (-200 / 400)))
+
+
+def test_win_probability_is_symmetric():
+    ratings = {"India": 1610.0, "Australia": 1560.0}
+
+    p = win_probability(ratings, "India", "Australia", CONFIG, home="Australia")
+    q = win_probability(ratings, "Australia", "India", CONFIG, home="Australia")
+
+    assert p + q == pytest.approx(1.0)
+
+
+def test_win_probability_uses_the_configured_scale():
+    ratings = {"India": 1600.0, "Australia": 1500.0}
+
+    p = win_probability(ratings, "India", "Australia", EloConfig(scale=200.0))
+
+    assert p == pytest.approx(1 / (1 + 10**-0.5))
+
+
+def test_win_probability_rejects_a_home_team_that_is_not_playing():
+    with pytest.raises(ValueError):
+        win_probability({}, "India", "Australia", CONFIG, home="England")
+
+
+def test_win_probability_rejects_a_team_playing_itself():
+    with pytest.raises(ValueError):
+        win_probability({}, "India", "India", CONFIG)
 
 
 # --- run_elo ----------------------------------------------------------------
