@@ -12,6 +12,10 @@ Predictions are logged before each match and scored afterwards, so the model's t
 
 > Status: early development.
 
+## Website
+
+`web/` is a fantasy bilateral series simulator built on the same ratings. See [web/README.md](web/README.md).
+
 ## Data
 
 Ball-by-ball match data comes from [Cricsheet](https://cricsheet.org), which is openly licensed. Raw data is downloaded by the pipeline and not stored in this repository.

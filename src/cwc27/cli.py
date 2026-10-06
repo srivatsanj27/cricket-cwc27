@@ -33,11 +33,13 @@ from cwc27.tracking.display import format_update
 from cwc27.tracking.log import read_log, write_log
 from cwc27.tracking.update import run_update
 from cwc27.venues import home_team, load_city_countries
+from cwc27.web_export import build_web_export, write_web_export
 
 MAX_ERRORS_SHOWN = 10
 DEFAULT_ELO = EloConfig()
 DEFAULT_K_VALUES = (10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0)
 DEFAULT_HOME_VALUES = (0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0)
+DEFAULT_WEB_EXPORT = Path("web/data/ratings.json")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -53,6 +55,7 @@ def _build_parser() -> argparse.ArgumentParser:
     _add_tune_command(commands)
     _add_result_command(commands)
     _add_update_command(commands)
+    _add_export_web_command(commands)
     return parser
 
 
@@ -132,6 +135,16 @@ def _add_update_command(commands: argparse._SubParsersAction) -> None:
     # For tests and replays: treat this date as today.
     update.add_argument("--today", type=date.fromisoformat, default=None, help=argparse.SUPPRESS)
     update.set_defaults(handler=_update)
+
+
+def _add_export_web_command(commands: argparse._SubParsersAction) -> None:
+    export = commands.add_parser(
+        "export-web", help="write current ratings and venues as JSON for the website"
+    )
+    export.add_argument(
+        "--out", type=Path, default=DEFAULT_WEB_EXPORT, help="where to write the JSON"
+    )
+    export.set_defaults(handler=_export_web)
 
 
 def _add_since_argument(command: argparse.ArgumentParser) -> None:
@@ -362,6 +375,29 @@ def _update(args: argparse.Namespace) -> int:
         return 1
     print()
     print(format_update(outcome))
+    return 0
+
+
+def _export_web(args: argparse.Namespace) -> int:
+    matches = _load_matches_or_report(config.RATINGS_START)
+    if matches is None:
+        return 1
+    try:
+        payload = build_web_export(
+            matches,
+            DEFAULT_ELO,
+            load_city_countries(),
+            generated_at=datetime.now(UTC),
+            active_since=config.WINDOW_START,
+        )
+        write_web_export(args.out, payload)
+    except (ValueError, OSError) as exc:
+        print(f"Could not export for the website: {exc}", file=sys.stderr)
+        return 1
+    print(
+        f"Wrote {len(payload['teams'])} teams and {len(payload['venues'])} venues "
+        f"(ratings through {payload['ratings_through']}) to {args.out}"
+    )
     return 0
 
 
