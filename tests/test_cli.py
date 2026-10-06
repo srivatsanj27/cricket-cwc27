@@ -70,6 +70,44 @@ def test_backtest_reports_each_model(tmp_path, monkeypatch, cricsheet_zip, capsy
     assert "Since 2023 WC final" in out
 
 
+def test_tune_reports_best_setting(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+    zip_path = cricsheet_zip(
+        {
+            "1": make_cricsheet_match(teams=("India", "Australia"), date="2022-03-01"),
+            "2": make_cricsheet_match(teams=("India", "Australia"), date="2022-04-01"),
+            "3": make_cricsheet_match(teams=("India", "Australia"), date="2024-01-01"),
+        }
+    )
+    main(["ingest", "--zip", str(zip_path)])
+    capsys.readouterr()
+
+    exit_code = main(["tune", "--k-values", "10,40", "--home-values", "0,60", "--top", "3"])
+
+    out = capsys.readouterr().out
+    assert exit_code == 0
+    assert "Top 3 of 4 settings" in out
+    assert "Best: k=" in out
+    assert "(current defaults)" in out
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["--k-values", "10,abc"],
+        ["--k-values", "0,10"],
+        ["--k-values", "inf"],
+        ["--home-values", "-5"],
+        ["--top", "0"],
+    ],
+)
+def test_tune_rejects_invalid_grids(args):
+    with pytest.raises(SystemExit) as exit_info:
+        main(["tune", *args])
+
+    assert exit_info.value.code == 2
+
+
 @pytest.mark.parametrize("args", [["--k", "0"], ["--k", "-5"], ["--home-advantage", "-1"]])
 def test_backtest_rejects_invalid_elo_settings(args):
     with pytest.raises(SystemExit) as exit_info:
