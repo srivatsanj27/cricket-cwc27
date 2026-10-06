@@ -11,6 +11,7 @@ import duckdb
 
 from cwc27 import config
 from cwc27.ingest.cricsheet import ParseError, download_odi_zip, parse_zip
+from cwc27.ingest.manual import load_manual_results, merge_sources
 from cwc27.store import MatchStore
 
 MAX_ERRORS_SHOWN = 10
@@ -50,16 +51,26 @@ def _ingest(args: argparse.Namespace) -> int:
         print("No matches parsed; database left unchanged.", file=sys.stderr)
         return 1
 
+    manual = load_manual_results(config.manual_results_dir())
+    _report_errors(manual.errors)
+    merged, superseded = merge_sources(result.parsed, manual.parsed)
+
     try:
-        MatchStore(config.database_path()).save(result.parsed)
+        MatchStore(config.database_path()).save(merged, replace_source="manual")
     except (duckdb.Error, OSError) as exc:
         print(f"Could not save to database: {exc}", file=sys.stderr)
         return 1
 
-    in_window = sum(1 for p in result.parsed if p.match.date >= config.WINDOW_START)
+    in_window = sum(1 for p in merged if p.match.date >= config.WINDOW_START)
     print(
-        f"Loaded {len(result.parsed)} matches ({in_window} since {config.WINDOW_START.isoformat()})"
+        f"Loaded {len(merged)} matches ({len(result.parsed)} Cricsheet, "
+        f"{len(merged) - len(result.parsed)} manual; "
+        f"{in_window} since {config.WINDOW_START.isoformat()})"
     )
+    if superseded:
+        print(f"{len(superseded)} manual result(s) now covered by Cricsheet and can be removed:")
+        for match_id in superseded:
+            print(f"  {match_id}")
     return 0
 
 

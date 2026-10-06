@@ -1,6 +1,7 @@
 """DuckDB-backed storage for matches and playing XIs."""
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
+from contextlib import contextmanager
 from datetime import date
 from pathlib import Path
 
@@ -50,35 +51,51 @@ class MatchStore:
             con.execute(_CREATE_MATCHES)
             con.execute(_CREATE_APPEARANCES)
 
-    def save(self, parsed: Iterable[ParsedMatch]) -> None:
-        """Insert matches, replacing any already stored with the same match_id."""
+    def save(self, parsed: Iterable[ParsedMatch], replace_source: str | None = None) -> None:
+        """Insert matches, replacing any already stored with the same match_id.
+
+        With `replace_source`, every stored match from that source is removed first, so
+        rows edited out of (or superseded in) that source don't linger. All in one transaction.
+        """
         items = list(parsed)
-        if not items:
-            return
         ids = [(p.match.match_id,) for p in items]
         match_rows = [_match_to_row(p.match) for p in items]
         appearance_rows = [
             (a.match_id, a.team, a.player_name, a.player_id) for p in items for a in p.appearances
         ]
-        placeholders = ", ".join("?" * len(match_rows[0]))
+        with self._transaction() as con:
+            if replace_source is not None:
+                con.execute(
+                    "DELETE FROM appearances WHERE match_id IN "
+                    "(SELECT match_id FROM matches WHERE source = ?)",
+                    [replace_source],
+                )
+                con.execute("DELETE FROM matches WHERE source = ?", [replace_source])
+            if not items:
+                return
+            con.executemany("DELETE FROM appearances WHERE match_id = ?", ids)
+            con.executemany("DELETE FROM matches WHERE match_id = ?", ids)
+            placeholders = ", ".join("?" * len(match_rows[0]))
+            con.executemany(
+                f"INSERT INTO matches ({_MATCH_COLUMNS}) VALUES ({placeholders})", match_rows
+            )
+            if appearance_rows:
+                con.executemany(
+                    "INSERT INTO appearances (match_id, team, player_name, player_id) "
+                    "VALUES (?, ?, ?, ?)",
+                    appearance_rows,
+                )
+
+    @contextmanager
+    def _transaction(self) -> Iterator[duckdb.DuckDBPyConnection]:
         with self._connect() as con:
             con.execute("BEGIN TRANSACTION")
             try:
-                con.executemany("DELETE FROM appearances WHERE match_id = ?", ids)
-                con.executemany("DELETE FROM matches WHERE match_id = ?", ids)
-                con.executemany(
-                    f"INSERT INTO matches ({_MATCH_COLUMNS}) VALUES ({placeholders})", match_rows
-                )
-                if appearance_rows:
-                    con.executemany(
-                        "INSERT INTO appearances (match_id, team, player_name, player_id) "
-                        "VALUES (?, ?, ?, ?)",
-                        appearance_rows,
-                    )
-                con.execute("COMMIT")
+                yield con
             except BaseException:
                 con.execute("ROLLBACK")
                 raise
+            con.execute("COMMIT")
 
     def load_matches(self, since: date | None = None) -> list[Match]:
         query = f"SELECT {_MATCH_COLUMNS} FROM matches"
