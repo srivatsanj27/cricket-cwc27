@@ -28,13 +28,20 @@ def load_city_countries(path: Path = CITY_COUNTRY_CSV) -> Mapping[str, str]:
 
 def country_of(match: Match, city_countries: Mapping[str, str]) -> str | None:
     """Country a match was played in, or None if the location isn't in the table."""
-    if match.city and match.city in city_countries:
-        return city_countries[match.city]
-    if match.venue:
+    return country_of_place(match.city, match.venue, city_countries)
+
+
+def country_of_place(
+    city: str | None, venue: str | None, city_countries: Mapping[str, str]
+) -> str | None:
+    """Country for a city, falling back to a city named in the venue; None if unknown."""
+    if city and city in city_countries:
+        return city_countries[city]
+    if venue:
         # Longest whole-word match first, so "East London" beats "London".
-        for city in sorted(city_countries, key=len, reverse=True):
-            if re.search(rf"\b{re.escape(city)}\b", match.venue):
-                return city_countries[city]
+        for known_city in sorted(city_countries, key=len, reverse=True):
+            if re.search(rf"\b{re.escape(known_city)}\b", venue):
+                return city_countries[known_city]
     return None
 
 

@@ -1,5 +1,7 @@
 """Team names and ICC membership."""
 
+import re
+
 FULL_MEMBERS = frozenset(
     {
         "Afghanistan",
@@ -31,6 +33,11 @@ def normalise_team(name: str) -> str:
     if not stripped:
         raise ValueError("team name is blank")
     return _ALIASES.get(stripped, stripped)
+
+
+def team_slug(team: str) -> str:
+    """Lowercase, hyphenated form for IDs: 'Sri Lanka' -> 'sri-lanka'."""
+    return re.sub(r"[^a-z0-9]+", "-", team.lower()).strip("-")
 
 
 def is_full_member(team: str) -> bool:
