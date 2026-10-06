@@ -7,15 +7,15 @@ date,team_a,team_b,winner,result_type,margin_runs,margin_wickets,venue,city,toss
 2019-05-10,Afghanistan,Scotland,Afghanistan,normal,2,,Edinburgh,Edinburgh,Scotland,bat,,ESPNcricinfo ODI # 4131
 2019-05-19,Afghanistan,Ireland,Ireland,normal,72,,Belfast,Belfast,Afghanistan,field,,ESPNcricinfo ODI # 4139
 2019-05-21,Afghanistan,Ireland,Afghanistan,normal,126,,Belfast,Belfast,Ireland,field,,ESPNcricinfo ODI # 4141
-2019-06-01,Afghanistan,Australia,Australia,normal,,7,Bristol,Bristol,Afghanistan,bat,,ESPNcricinfo ODI # 4146
-2019-06-04,Afghanistan,Sri Lanka,Sri Lanka,normal,34,,Cardiff,Cardiff,Afghanistan,field,,ESPNcricinfo ODI # 4149
-2019-06-08,Afghanistan,New Zealand,New Zealand,normal,,7,Taunton,Taunton,New Zealand,field,,ESPNcricinfo ODI # 4154
-2019-06-15,Afghanistan,South Africa,South Africa,normal,,9,Cardiff,Cardiff,South Africa,field,,ESPNcricinfo ODI # 4160
-2019-06-18,Afghanistan,England,England,normal,150,,Manchester,Manchester,England,bat,,ESPNcricinfo ODI # 4163
-2019-06-22,Afghanistan,India,India,normal,11,,Southampton,Southampton,India,bat,,ESPNcricinfo ODI # 4169
-2019-06-24,Afghanistan,Bangladesh,Bangladesh,normal,62,,Southampton,Southampton,Afghanistan,field,,ESPNcricinfo ODI # 4172
-2019-06-29,Afghanistan,Pakistan,Pakistan,normal,,3,Leeds,Leeds,Afghanistan,bat,,ESPNcricinfo ODI # 4177
-2019-07-04,Afghanistan,West Indies,West Indies,normal,23,,Leeds,Leeds,West Indies,bat,,ESPNcricinfo ODI # 4184
+2019-06-01,Afghanistan,Australia,Australia,normal,,7,Bristol,Bristol,Afghanistan,bat,World Cup,ESPNcricinfo ODI # 4146
+2019-06-04,Afghanistan,Sri Lanka,Sri Lanka,normal,34,,Cardiff,Cardiff,Afghanistan,field,World Cup,ESPNcricinfo ODI # 4149
+2019-06-08,Afghanistan,New Zealand,New Zealand,normal,,7,Taunton,Taunton,New Zealand,field,World Cup,ESPNcricinfo ODI # 4154
+2019-06-15,Afghanistan,South Africa,South Africa,normal,,9,Cardiff,Cardiff,South Africa,field,World Cup,ESPNcricinfo ODI # 4160
+2019-06-18,Afghanistan,England,England,normal,150,,Manchester,Manchester,England,bat,World Cup,ESPNcricinfo ODI # 4163
+2019-06-22,Afghanistan,India,India,normal,11,,Southampton,Southampton,India,bat,World Cup,ESPNcricinfo ODI # 4169
+2019-06-24,Afghanistan,Bangladesh,Bangladesh,normal,62,,Southampton,Southampton,Afghanistan,field,World Cup,ESPNcricinfo ODI # 4172
+2019-06-29,Afghanistan,Pakistan,Pakistan,normal,,3,Leeds,Leeds,Afghanistan,bat,World Cup,ESPNcricinfo ODI # 4177
+2019-07-04,Afghanistan,West Indies,West Indies,normal,23,,Leeds,Leeds,West Indies,bat,World Cup,ESPNcricinfo ODI # 4184
 2019-11-06,Afghanistan,West Indies,West Indies,normal,,7,Lucknow,Lucknow,West Indies,field,,ESPNcricinfo ODI # 4213
 2019-11-09,Afghanistan,West Indies,West Indies,normal,47,,Lucknow,Lucknow,Afghanistan,field,,ESPNcricinfo ODI # 4214
 2019-11-11,Afghanistan,West Indies,West Indies,normal,,5,Lucknow,Lucknow,West Indies,field,,ESPNcricinfo ODI # 4215
@@ -43,17 +43,17 @@ date,team_a,team_b,winner,result_type,margin_runs,margin_wickets,venue,city,toss
 2023-08-22,Afghanistan,Pakistan,Pakistan,normal,142,,Hambantota,Hambantota,Pakistan,bat,,ESPNcricinfo ODI # 4625
 2023-08-24,Afghanistan,Pakistan,Pakistan,normal,,1,Hambantota,Hambantota,Afghanistan,bat,,ESPNcricinfo ODI # 4626
 2023-08-26,Afghanistan,Pakistan,Pakistan,normal,59,,Colombo (RPS),Colombo,Pakistan,bat,,ESPNcricinfo ODI # 4627
-2023-09-03,Afghanistan,Bangladesh,Bangladesh,normal,89,,Lahore,Lahore,Bangladesh,bat,,ESPNcricinfo ODI # 4631
-2023-09-05,Afghanistan,Sri Lanka,Sri Lanka,normal,2,,Lahore,Lahore,Sri Lanka,bat,,ESPNcricinfo ODI # 4633
-2023-10-07,Afghanistan,Bangladesh,Bangladesh,normal,,6,Dharamsala,Dharamsala,Bangladesh,field,,ESPNcricinfo ODI # 4660
-2023-10-11,Afghanistan,India,India,normal,,8,Delhi,Delhi,Afghanistan,bat,,ESPNcricinfo ODI # 4666
-2023-10-15,Afghanistan,England,Afghanistan,normal,69,,Delhi,Delhi,England,field,,ESPNcricinfo ODI # 4670
-2023-10-18,Afghanistan,New Zealand,New Zealand,normal,149,,Chennai,Chennai,Afghanistan,field,,ESPNcricinfo ODI # 4673
-2023-10-23,Afghanistan,Pakistan,Afghanistan,normal,,8,Chennai,Chennai,Pakistan,bat,,ESPNcricinfo ODI # 4679
-2023-10-30,Afghanistan,Sri Lanka,Afghanistan,normal,,7,Pune,Pune,Afghanistan,field,,ESPNcricinfo ODI # 4687
-2023-11-03,Afghanistan,Netherlands,Afghanistan,normal,,7,Lucknow,Lucknow,Netherlands,bat,,ESPNcricinfo ODI # 4691
-2023-11-07,Afghanistan,Australia,Australia,normal,,3,Wankhede,Mumbai,Afghanistan,bat,,ESPNcricinfo ODI # 4696
-2023-11-10,Afghanistan,South Africa,South Africa,normal,,5,Ahmedabad,Ahmedabad,Afghanistan,bat,,ESPNcricinfo ODI # 4699
+2023-09-03,Afghanistan,Bangladesh,Bangladesh,normal,89,,Lahore,Lahore,Bangladesh,bat,Asia Cup,ESPNcricinfo ODI # 4631
+2023-09-05,Afghanistan,Sri Lanka,Sri Lanka,normal,2,,Lahore,Lahore,Sri Lanka,bat,Asia Cup,ESPNcricinfo ODI # 4633
+2023-10-07,Afghanistan,Bangladesh,Bangladesh,normal,,6,Dharamsala,Dharamsala,Bangladesh,field,ICC Cricket World Cup,ESPNcricinfo ODI # 4660
+2023-10-11,Afghanistan,India,India,normal,,8,Delhi,Delhi,Afghanistan,bat,ICC Cricket World Cup,ESPNcricinfo ODI # 4666
+2023-10-15,Afghanistan,England,Afghanistan,normal,69,,Delhi,Delhi,England,field,ICC Cricket World Cup,ESPNcricinfo ODI # 4670
+2023-10-18,Afghanistan,New Zealand,New Zealand,normal,149,,Chennai,Chennai,Afghanistan,field,ICC Cricket World Cup,ESPNcricinfo ODI # 4673
+2023-10-23,Afghanistan,Pakistan,Afghanistan,normal,,8,Chennai,Chennai,Pakistan,bat,ICC Cricket World Cup,ESPNcricinfo ODI # 4679
+2023-10-30,Afghanistan,Sri Lanka,Afghanistan,normal,,7,Pune,Pune,Afghanistan,field,ICC Cricket World Cup,ESPNcricinfo ODI # 4687
+2023-11-03,Afghanistan,Netherlands,Afghanistan,normal,,7,Lucknow,Lucknow,Netherlands,bat,ICC Cricket World Cup,ESPNcricinfo ODI # 4691
+2023-11-07,Afghanistan,Australia,Australia,normal,,3,Wankhede,Mumbai,Afghanistan,bat,ICC Cricket World Cup,ESPNcricinfo ODI # 4696
+2023-11-10,Afghanistan,South Africa,South Africa,normal,,5,Ahmedabad,Ahmedabad,Afghanistan,bat,ICC Cricket World Cup,ESPNcricinfo ODI # 4699
 2024-02-09,Afghanistan,Sri Lanka,Sri Lanka,normal,42,,Pallekele,Kandy,Afghanistan,field,,ESPNcricinfo ODI # 4725
 2024-02-11,Afghanistan,Sri Lanka,Sri Lanka,normal,155,,Pallekele,Kandy,Sri Lanka,bat,,ESPNcricinfo ODI # 4727
 2024-02-14,Afghanistan,Sri Lanka,Sri Lanka,normal,,7,Pallekele,Kandy,Afghanistan,bat,,ESPNcricinfo ODI # 4729
@@ -68,9 +68,9 @@ date,team_a,team_b,winner,result_type,margin_runs,margin_wickets,venue,city,toss
 2024-12-17,Afghanistan,Zimbabwe,,no_result,,,Harare,Harare,Afghanistan,field,,ESPNcricinfo ODI # 4816
 2024-12-19,Afghanistan,Zimbabwe,Afghanistan,normal,232,,Harare,Harare,Zimbabwe,field,,ESPNcricinfo ODI # 4818
 2024-12-21,Afghanistan,Zimbabwe,Afghanistan,normal,,8,Harare,Harare,Afghanistan,field,,ESPNcricinfo ODI # 4820
-2025-02-21,Afghanistan,South Africa,South Africa,normal,107,,Karachi,Karachi,South Africa,bat,,ESPNcricinfo ODI # 4845
-2025-02-26,Afghanistan,England,Afghanistan,normal,8,,Lahore,Lahore,Afghanistan,bat,,ESPNcricinfo ODI # 4849
-2025-02-28,Afghanistan,Australia,,no_result,,,Lahore,Lahore,Afghanistan,bat,,ESPNcricinfo ODI # 4850
+2025-02-21,Afghanistan,South Africa,South Africa,normal,107,,Karachi,Karachi,South Africa,bat,ICC Champions Trophy,ESPNcricinfo ODI # 4845
+2025-02-26,Afghanistan,England,Afghanistan,normal,8,,Lahore,Lahore,Afghanistan,bat,ICC Champions Trophy,ESPNcricinfo ODI # 4849
+2025-02-28,Afghanistan,Australia,,no_result,,,Lahore,Lahore,Afghanistan,bat,ICC Champions Trophy,ESPNcricinfo ODI # 4850
 2025-10-08,Afghanistan,Bangladesh,Afghanistan,normal,,5,Abu Dhabi,Abu Dhabi,Bangladesh,bat,,ESPNcricinfo ODI # 4907
 2025-10-11,Afghanistan,Bangladesh,Afghanistan,normal,81,,Abu Dhabi,Abu Dhabi,Afghanistan,bat,,ESPNcricinfo ODI # 4908
 2025-10-14,Afghanistan,Bangladesh,Afghanistan,normal,200,,Abu Dhabi,Abu Dhabi,Afghanistan,bat,,ESPNcricinfo ODI # 4909
