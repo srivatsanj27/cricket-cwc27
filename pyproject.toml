@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cwc27"
+version = "0.1.0"
+description = "Predicting men's ODI results, squads and the 2027 Cricket World Cup"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+    "certifi>=2024.2",
+    "duckdb>=1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+cwc27 = "cwc27.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cwc27"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=cwc27 --cov-report=term-missing"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
