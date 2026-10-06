@@ -4,8 +4,10 @@ import os
 from datetime import date
 from pathlib import Path
 
-# First day after the 2023 World Cup final: start of the analysis window.
-WINDOW_START = date(2023, 11, 19)
+# Day after the 2023 World Cup final (19 Nov 2023): start of the analysis window.
+WINDOW_START = date(2023, 11, 20)
+# Ratings warm up from here, so they are settled by the analysis window.
+RATINGS_START = date(2019, 1, 1)
 
 
 def data_dir() -> Path:
