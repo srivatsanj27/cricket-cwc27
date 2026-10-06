@@ -1,3 +1,4 @@
+from dataclasses import replace
 from datetime import date
 
 from cwc27.ingest.cricsheet import parse_match
@@ -40,6 +41,23 @@ def test_load_matches_since_filters_by_date(tmp_path):
     matches = store.load_matches(since=date(2023, 11, 19))
 
     assert [m.match_id for m in matches] == ["cs_2"]
+
+
+def _manual(parsed):
+    return replace(parsed, match=replace(parsed.match, source="manual"), appearances=())
+
+
+def test_replace_source_drops_rows_of_that_source_no_longer_supplied(tmp_path):
+    store = MatchStore(tmp_path / "test.duckdb")
+    store.save([_parsed("cs_1", "2024-01-01"), _manual(_parsed("man_old", "2024-02-01"))])
+
+    store.save(
+        [_parsed("cs_1", "2024-01-01"), _manual(_parsed("man_new", "2024-03-01"))],
+        replace_source="manual",
+    )
+
+    assert [m.match_id for m in store.load_matches()] == ["cs_1", "man_new"]
+    assert store.count_appearances() == 22
 
 
 def test_data_persists_across_store_instances(tmp_path):
