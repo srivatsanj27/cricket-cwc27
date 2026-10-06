@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fantasy Series</title>
+    <meta
+      name="description"
+      content="Pick two ODI teams and the venue for every match, then see who wins the series from 20,000 simulations."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="wordmark" href="./">Fantasy Series</a>
+      <a class="masthead-link" href="#method">How it works</a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>Pick two teams.<br />Play the series.</h1>
+        <p>Choose a venue for every ODI. We play the series 20,000 times and count who wins.</p>
+      </section>
+
+      <div class="workspace">
+        <form id="builder" class="builder" novalidate>
+          <div class="teams">
+            <div class="field">
+              <label for="team-a">Team A</label>
+              <div class="select"><select id="team-a" name="team-a" disabled></select></div>
+            </div>
+            <button type="button" id="swap" class="button-secondary swap" aria-label="Swap teams" disabled>
+              Swap
+            </button>
+            <div class="field">
+              <label for="team-b">Team B</label>
+              <div class="select"><select id="team-b" name="team-b" disabled></select></div>
+            </div>
+          </div>
+
+          <fieldset class="field count">
+            <legend>Matches</legend>
+            <div id="count-chips" class="chips"></div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Venues</legend>
+            <ol id="fixtures" class="fixtures">
+              <li class="skeleton-row"></li>
+              <li class="skeleton-row"></li>
+              <li class="skeleton-row"></li>
+            </ol>
+          </fieldset>
+        </form>
+
+        <p id="summary" class="visually-hidden" aria-live="polite"></p>
+        <section id="result" class="result" aria-busy="true" aria-label="Series forecast">
+          <div class="skeleton-block"></div>
+        </section>
+      </div>
+
+      <section id="method" class="method">
+        <h2>How it works</h2>
+        <p>
+          Each team has an Elo rating built from every men's ODI since 2019. A gap of 400 points
+          means 10 to 1 odds. Playing in your own country adds
+          <span data-fill="home-advantage">80</span> points for that match, which is the setting
+          that best predicted past results.
+        </p>
+        <p>
+          The series is played 20,000 times with each match's win chance. Ties and washouts are
+          left out, so every match has a winner. Only teams that have played an ODI since the 2023
+          World Cup final are listed.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p id="data-note">Loading ratings.</p>
+      <p>Match data from <a href="https://cricsheet.org">Cricsheet</a>.</p>
+    </footer>
+  </body>
+</html>

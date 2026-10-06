@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from cwc27.cli import main
@@ -241,3 +243,29 @@ def test_update_predicts_then_scores_after_a_result(tmp_path, monkeypatch, crics
     assert "Scored" in out
     assert "Track record: 1 match" in out
     assert "1-0" in out  # series score so far
+
+
+def test_export_web_writes_ratings_json(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+    zip_path = cricsheet_zip(
+        {"1": make_cricsheet_match(teams=("India", "Australia"), date="2024-01-01")}
+    )
+    main(["ingest", "--zip", str(zip_path)])
+    capsys.readouterr()
+    out_path = tmp_path / "site" / "ratings.json"
+
+    exit_code = main(["export-web", "--out", str(out_path)])
+
+    assert exit_code == 0
+    payload = json.loads(out_path.read_text())
+    assert {t["name"] for t in payload["teams"]} == {"India", "Australia"}
+    assert "2 teams" in capsys.readouterr().out
+
+
+def test_export_web_fails_cleanly_without_data(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+
+    exit_code = main(["export-web", "--out", str(tmp_path / "ratings.json")])
+
+    assert exit_code == 1
+    assert "cwc27 ingest" in capsys.readouterr().err

@@ -1,0 +1,589 @@
+{
+  "generated_at": "2026-10-06T14:54:40.553724+00:00",
+  "ratings_through": "2026-10-05",
+  "matches_rated": 940,
+  "elo": {
+    "home_advantage": 80.0,
+    "scale": 400.0
+  },
+  "teams": [
+    {
+      "name": "India",
+      "rating": 1647.3,
+      "matches": 32,
+      "full_member": true
+    },
+    {
+      "name": "New Zealand",
+      "rating": 1640.6,
+      "matches": 37,
+      "full_member": true
+    },
+    {
+      "name": "Australia",
+      "rating": 1599.6,
+      "matches": 34,
+      "full_member": true
+    },
+    {
+      "name": "South Africa",
+      "rating": 1579.0,
+      "matches": 35,
+      "full_member": true
+    },
+    {
+      "name": "Afghanistan",
+      "rating": 1562.4,
+      "matches": 27,
+      "full_member": true
+    },
+    {
+      "name": "Pakistan",
+      "rating": 1560.6,
+      "matches": 32,
+      "full_member": true
+    },
+    {
+      "name": "Sri Lanka",
+      "rating": 1527.9,
+      "matches": 38,
+      "full_member": true
+    },
+    {
+      "name": "England",
+      "rating": 1521.8,
+      "matches": 35,
+      "full_member": true
+    },
+    {
+      "name": "Bangladesh",
+      "rating": 1469.3,
+      "matches": 35,
+      "full_member": true
+    },
+    {
+      "name": "West Indies",
+      "rating": 1440.7,
+      "matches": 39,
+      "full_member": true
+    },
+    {
+      "name": "Scotland",
+      "rating": 1408.9,
+      "matches": 32,
+      "full_member": false
+    },
+    {
+      "name": "United States of America",
+      "rating": 1383.4,
+      "matches": 31,
+      "full_member": false
+    },
+    {
+      "name": "Ireland",
+      "rating": 1335.6,
+      "matches": 18,
+      "full_member": true
+    },
+    {
+      "name": "Netherlands",
+      "rating": 1335.5,
+      "matches": 29,
+      "full_member": false
+    },
+    {
+      "name": "Zimbabwe",
+      "rating": 1312.7,
+      "matches": 23,
+      "full_member": true
+    },
+    {
+      "name": "Nepal",
+      "rating": 1295.3,
+      "matches": 35,
+      "full_member": false
+    },
+    {
+      "name": "Namibia",
+      "rating": 1277.9,
+      "matches": 35,
+      "full_member": false
+    },
+    {
+      "name": "Oman",
+      "rating": 1271.1,
+      "matches": 28,
+      "full_member": false
+    },
+    {
+      "name": "United Arab Emirates",
+      "rating": 1219.1,
+      "matches": 30,
+      "full_member": false
+    },
+    {
+      "name": "Canada",
+      "rating": 1198.4,
+      "matches": 31,
+      "full_member": false
+    }
+  ],
+  "venues": [
+    {
+      "city": "Adelaide",
+      "country": "Australia"
+    },
+    {
+      "city": "Cairns",
+      "country": "Australia"
+    },
+    {
+      "city": "Canberra",
+      "country": "Australia"
+    },
+    {
+      "city": "Mackay",
+      "country": "Australia"
+    },
+    {
+      "city": "Melbourne",
+      "country": "Australia"
+    },
+    {
+      "city": "Perth",
+      "country": "Australia"
+    },
+    {
+      "city": "Sydney",
+      "country": "Australia"
+    },
+    {
+      "city": "Townsville",
+      "country": "Australia"
+    },
+    {
+      "city": "Chattogram",
+      "country": "Bangladesh"
+    },
+    {
+      "city": "Dhaka",
+      "country": "Bangladesh"
+    },
+    {
+      "city": "Mirpur",
+      "country": "Bangladesh"
+    },
+    {
+      "city": "Sylhet",
+      "country": "Bangladesh"
+    },
+    {
+      "city": "King City",
+      "country": "Canada"
+    },
+    {
+      "city": "Birmingham",
+      "country": "England"
+    },
+    {
+      "city": "Bristol",
+      "country": "England"
+    },
+    {
+      "city": "Cardiff",
+      "country": "England"
+    },
+    {
+      "city": "Chelmsford",
+      "country": "England"
+    },
+    {
+      "city": "Chester-le-Street",
+      "country": "England"
+    },
+    {
+      "city": "Leeds",
+      "country": "England"
+    },
+    {
+      "city": "London",
+      "country": "England"
+    },
+    {
+      "city": "Manchester",
+      "country": "England"
+    },
+    {
+      "city": "Nottingham",
+      "country": "England"
+    },
+    {
+      "city": "Southampton",
+      "country": "England"
+    },
+    {
+      "city": "Taunton",
+      "country": "England"
+    },
+    {
+      "city": "Ahmedabad",
+      "country": "India"
+    },
+    {
+      "city": "Bengaluru",
+      "country": "India"
+    },
+    {
+      "city": "Chandigarh",
+      "country": "India"
+    },
+    {
+      "city": "Chennai",
+      "country": "India"
+    },
+    {
+      "city": "Cuttack",
+      "country": "India"
+    },
+    {
+      "city": "Dehradun",
+      "country": "India"
+    },
+    {
+      "city": "Delhi",
+      "country": "India"
+    },
+    {
+      "city": "Dharamsala",
+      "country": "India"
+    },
+    {
+      "city": "Guwahati",
+      "country": "India"
+    },
+    {
+      "city": "Hyderabad",
+      "country": "India"
+    },
+    {
+      "city": "Indore",
+      "country": "India"
+    },
+    {
+      "city": "Kolkata",
+      "country": "India"
+    },
+    {
+      "city": "Lucknow",
+      "country": "India"
+    },
+    {
+      "city": "Mumbai",
+      "country": "India"
+    },
+    {
+      "city": "Nagpur",
+      "country": "India"
+    },
+    {
+      "city": "New Chandigarh",
+      "country": "India"
+    },
+    {
+      "city": "Pune",
+      "country": "India"
+    },
+    {
+      "city": "Raipur",
+      "country": "India"
+    },
+    {
+      "city": "Rajkot",
+      "country": "India"
+    },
+    {
+      "city": "Ranchi",
+      "country": "India"
+    },
+    {
+      "city": "Thiruvananthapuram",
+      "country": "India"
+    },
+    {
+      "city": "Vadodara",
+      "country": "India"
+    },
+    {
+      "city": "Visakhapatnam",
+      "country": "India"
+    },
+    {
+      "city": "Belfast",
+      "country": "Ireland"
+    },
+    {
+      "city": "Bready",
+      "country": "Ireland"
+    },
+    {
+      "city": "Dublin",
+      "country": "Ireland"
+    },
+    {
+      "city": "Bangi",
+      "country": "Malaysia"
+    },
+    {
+      "city": "Kuala Lumpur",
+      "country": "Malaysia"
+    },
+    {
+      "city": "Windhoek",
+      "country": "Namibia"
+    },
+    {
+      "city": "Kathmandu",
+      "country": "Nepal"
+    },
+    {
+      "city": "Kirtipur",
+      "country": "Nepal"
+    },
+    {
+      "city": "Amstelveen",
+      "country": "Netherlands"
+    },
+    {
+      "city": "Deventer",
+      "country": "Netherlands"
+    },
+    {
+      "city": "Rotterdam",
+      "country": "Netherlands"
+    },
+    {
+      "city": "The Hague",
+      "country": "Netherlands"
+    },
+    {
+      "city": "Utrecht",
+      "country": "Netherlands"
+    },
+    {
+      "city": "Auckland",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Christchurch",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Dunedin",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Hamilton",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Mount Maunganui",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Napier",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Nelson",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Wellington",
+      "country": "New Zealand"
+    },
+    {
+      "city": "Al Amarat",
+      "country": "Oman"
+    },
+    {
+      "city": "Faisalabad",
+      "country": "Pakistan"
+    },
+    {
+      "city": "Karachi",
+      "country": "Pakistan"
+    },
+    {
+      "city": "Lahore",
+      "country": "Pakistan"
+    },
+    {
+      "city": "Multan",
+      "country": "Pakistan"
+    },
+    {
+      "city": "Rawalpindi",
+      "country": "Pakistan"
+    },
+    {
+      "city": "Port Moresby",
+      "country": "Papua New Guinea"
+    },
+    {
+      "city": "Doha",
+      "country": "Qatar"
+    },
+    {
+      "city": "Aberdeen",
+      "country": "Scotland"
+    },
+    {
+      "city": "Ayr",
+      "country": "Scotland"
+    },
+    {
+      "city": "Dundee",
+      "country": "Scotland"
+    },
+    {
+      "city": "Edinburgh",
+      "country": "Scotland"
+    },
+    {
+      "city": "Glasgow",
+      "country": "Scotland"
+    },
+    {
+      "city": "Benoni",
+      "country": "South Africa"
+    },
+    {
+      "city": "Bloemfontein",
+      "country": "South Africa"
+    },
+    {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    {
+      "city": "Centurion",
+      "country": "South Africa"
+    },
+    {
+      "city": "Durban",
+      "country": "South Africa"
+    },
+    {
+      "city": "East London",
+      "country": "South Africa"
+    },
+    {
+      "city": "Gqeberha",
+      "country": "South Africa"
+    },
+    {
+      "city": "Johannesburg",
+      "country": "South Africa"
+    },
+    {
+      "city": "Kimberley",
+      "country": "South Africa"
+    },
+    {
+      "city": "Paarl",
+      "country": "South Africa"
+    },
+    {
+      "city": "Port Elizabeth",
+      "country": "South Africa"
+    },
+    {
+      "city": "Potchefstroom",
+      "country": "South Africa"
+    },
+    {
+      "city": "Colombo",
+      "country": "Sri Lanka"
+    },
+    {
+      "city": "Dambulla",
+      "country": "Sri Lanka"
+    },
+    {
+      "city": "Hambantota",
+      "country": "Sri Lanka"
+    },
+    {
+      "city": "Kandy",
+      "country": "Sri Lanka"
+    },
+    {
+      "city": "Abu Dhabi",
+      "country": "United Arab Emirates"
+    },
+    {
+      "city": "Dubai",
+      "country": "United Arab Emirates"
+    },
+    {
+      "city": "Sharjah",
+      "country": "United Arab Emirates"
+    },
+    {
+      "city": "Dallas",
+      "country": "United States of America"
+    },
+    {
+      "city": "Lauderhill",
+      "country": "United States of America"
+    },
+    {
+      "city": "Pearland",
+      "country": "United States of America"
+    },
+    {
+      "city": "Basseterre",
+      "country": "West Indies"
+    },
+    {
+      "city": "Bridgetown",
+      "country": "West Indies"
+    },
+    {
+      "city": "Gros Islet",
+      "country": "West Indies"
+    },
+    {
+      "city": "Kingston",
+      "country": "West Indies"
+    },
+    {
+      "city": "North Sound",
+      "country": "West Indies"
+    },
+    {
+      "city": "Port of Spain",
+      "country": "West Indies"
+    },
+    {
+      "city": "Providence",
+      "country": "West Indies"
+    },
+    {
+      "city": "St George's",
+      "country": "West Indies"
+    },
+    {
+      "city": "Tarouba",
+      "country": "West Indies"
+    },
+    {
+      "city": "Bulawayo",
+      "country": "Zimbabwe"
+    },
+    {
+      "city": "Harare",
+      "country": "Zimbabwe"
+    }
+  ]
+}
