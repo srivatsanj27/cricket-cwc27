@@ -13,8 +13,8 @@ from cwc27.teams import is_full_member
 
 @dataclass(frozen=True, slots=True)
 class EloConfig:
-    k: float = 30.0  # how far one result moves a rating
-    home_advantage: float = 60.0  # Elo points added to the home side's rating when predicting
+    k: float = 25.0  # how far one result moves a rating
+    home_advantage: float = 80.0  # Elo points added to the home side's rating when predicting
     initial_full_member: float = 1500.0
     initial_associate: float = 1300.0
     scale: float = 400.0  # a gap of `scale` points means 10:1 odds
