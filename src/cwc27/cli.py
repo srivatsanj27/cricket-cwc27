@@ -7,7 +7,7 @@ import sys
 import urllib.error
 import zipfile
 from collections.abc import Callable
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import duckdb
@@ -21,12 +21,17 @@ from cwc27.evaluation.tuning import (
     format_results,
     grid_search,
 )
+from cwc27.fixtures import Fixture, load_fixtures
 from cwc27.ingest.cricsheet import ParseError, download_odi_zip, parse_zip
-from cwc27.ingest.manual import load_manual_results, merge_sources
+from cwc27.ingest.manual import append_result, load_manual_results, merge_sources
 from cwc27.models import Match
 from cwc27.ratings.elo import EloConfig
 from cwc27.ratings.model import EloModel
 from cwc27.store import MatchStore
+from cwc27.teams import normalise_team
+from cwc27.tracking.display import format_update
+from cwc27.tracking.log import read_log, write_log
+from cwc27.tracking.update import run_update
 from cwc27.venues import home_team, load_city_countries
 
 MAX_ERRORS_SHOWN = 10
@@ -46,6 +51,8 @@ def _build_parser() -> argparse.ArgumentParser:
     _add_ingest_command(commands)
     _add_backtest_command(commands)
     _add_tune_command(commands)
+    _add_result_command(commands)
+    _add_update_command(commands)
     return parser
 
 
@@ -92,6 +99,39 @@ def _add_tune_command(commands: argparse._SubParsersAction) -> None:
     tune.add_argument("--top", type=_positive_int, default=10, help="how many settings to list")
     _add_since_argument(tune)
     tune.set_defaults(handler=_tune)
+
+
+def _add_result_command(commands: argparse._SubParsersAction) -> None:
+    result = commands.add_parser(
+        "result", help="record a finished match that Cricsheet hasn't published yet"
+    )
+    result.add_argument("date", type=date.fromisoformat, help="YYYY-MM-DD")
+    result.add_argument("team_a")
+    result.add_argument("team_b")
+    outcome = result.add_mutually_exclusive_group(required=True)
+    outcome.add_argument("--winner", help="the team that won")
+    outcome.add_argument("--tie", action="store_true")
+    outcome.add_argument("--no-result", action="store_true", help="washout or abandoned")
+    margin = result.add_mutually_exclusive_group()
+    margin.add_argument("--runs", type=_positive_int, help="won by this many runs")
+    margin.add_argument("--wickets", type=_positive_int, help="won by this many wickets")
+    result.add_argument("--dls", action="store_true", help="decided by DLS")
+    result.add_argument("--venue", help="defaults to the fixture's venue")
+    result.add_argument("--city", help="defaults to the fixture's city")
+    result.add_argument("--event", help="defaults to the fixture's series")
+    result.set_defaults(handler=_result)
+
+
+def _add_update_command(commands: argparse._SubParsersAction) -> None:
+    update = commands.add_parser(
+        "update", help="ingest, score the prediction log and predict upcoming fixtures"
+    )
+    update.add_argument("--download", action="store_true", help="fetch the latest zip first")
+    update.add_argument("--zip", type=Path, default=None, help="path to a Cricsheet ODI zip")
+    update.add_argument("--sims", type=_positive_int, default=10_000, help="series simulations")
+    # For tests and replays: treat this date as today.
+    update.add_argument("--today", type=date.fromisoformat, default=None, help=argparse.SUPPRESS)
+    update.set_defaults(handler=_update)
 
 
 def _add_since_argument(command: argparse.ArgumentParser) -> None:
@@ -196,8 +236,11 @@ def _tune(args: argparse.Namespace) -> int:
 
 
 def _ingest(args: argparse.Namespace) -> int:
-    zip_path = args.zip or config.raw_zip_path()
-    if args.download and not _download(zip_path):
+    return _run_ingest(args.zip or config.raw_zip_path(), args.download)
+
+
+def _run_ingest(zip_path: Path, download: bool) -> int:
+    if download and not _download(zip_path):
         return 1
     if not zip_path.exists():
         print(f"Zip not found: {zip_path} (try --download)", file=sys.stderr)
@@ -244,6 +287,82 @@ def _download(zip_path: Path) -> bool:
         print(f"Download failed: {exc}", file=sys.stderr)
         return False
     return True
+
+
+def _result(args: argparse.Namespace) -> int:
+    try:
+        teams = {normalise_team(args.team_a), normalise_team(args.team_b)}
+        fixture = next(
+            (
+                f
+                for f in load_fixtures(config.fixtures_path()).fixtures
+                if f.date == args.date and {f.team_a, f.team_b} == teams
+            ),
+            None,
+        )
+        match = append_result(config.recent_results_path(), _result_values(args, fixture))
+    except (ValueError, OSError) as exc:
+        print(f"Could not record result: {exc}", file=sys.stderr)
+        return 1
+    print(f"Recorded {match.match_id}. Run `cwc27 update` to score and re-predict.")
+    return 0
+
+
+def _result_values(args: argparse.Namespace, fixture: Fixture | None) -> dict[str, str]:
+    if args.tie:
+        result_type = "tie"
+    elif args.no_result:
+        result_type = "no_result"
+    else:
+        result_type = "dls" if args.dls else "normal"
+    return {
+        "date": args.date.isoformat(),
+        "team_a": args.team_a,
+        "team_b": args.team_b,
+        "winner": args.winner or "",
+        "result_type": result_type,
+        "margin_runs": str(args.runs or ""),
+        "margin_wickets": str(args.wickets or ""),
+        "venue": args.venue or (fixture.venue if fixture and fixture.venue else ""),
+        "city": args.city or (fixture.city if fixture and fixture.city else ""),
+        "event": args.event or (fixture.series if fixture else ""),
+        "ref": "cwc27 result",
+    }
+
+
+def _update(args: argparse.Namespace) -> int:
+    if _run_ingest(args.zip or config.raw_zip_path(), args.download) != 0:
+        return 1
+    matches = _load_matches_or_report(config.RATINGS_START)
+    if matches is None:
+        return 1
+    fixture_load = load_fixtures(config.fixtures_path())
+    _report_errors(fixture_load.errors)
+    log_path = config.predictions_log_path()
+    try:
+        log = read_log(log_path)
+    except (ValueError, OSError) as exc:
+        print(f"Could not read the prediction log: {exc}", file=sys.stderr)
+        return 1
+
+    outcome = run_update(
+        matches,
+        fixture_load.fixtures,
+        log,
+        DEFAULT_ELO,
+        load_city_countries(),
+        today=args.today or date.today(),
+        now=datetime.now(UTC),
+        n_sims=args.sims,
+    )
+    try:
+        write_log(log_path, outcome.log)
+    except OSError as exc:
+        print(f"Could not write the prediction log: {exc}", file=sys.stderr)
+        return 1
+    print()
+    print(format_update(outcome))
+    return 0
 
 
 def _report_errors(errors: tuple[str, ...]) -> None:

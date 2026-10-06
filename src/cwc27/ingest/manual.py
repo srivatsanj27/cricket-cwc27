@@ -1,14 +1,13 @@
 """Hand-entered results (data/manual/*.csv) for matches Cricsheet lacks or hasn't published yet."""
 
 import csv
-import re
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from datetime import date
 from pathlib import Path
 
 from cwc27.ingest.cricsheet import ParsedMatch, ParseResult
 from cwc27.models import Match, ResultType
-from cwc27.teams import normalise_team
+from cwc27.teams import normalise_team, team_slug
 
 COLUMNS = (
     "date",
@@ -71,6 +70,26 @@ def merge_sources(
     return tuple(merged), tuple(superseded)
 
 
+def append_result(path: Path, values: Mapping[str, str]) -> Match:
+    """Validate one result and append it to `path` (created with a header if needed).
+
+    Raises ManualRowError if the row is invalid or the match is already in any manual file.
+    """
+    row = {column: values.get(column, "") for column in COLUMNS}
+    match = _row_to_match(row)
+    existing = load_manual_results(path.parent).parsed
+    if any(_fixture_key(p.match) == _fixture_key(match) for p in existing):
+        raise ManualRowError(f"a result for {match.match_id} is already recorded")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    is_new = not path.exists()
+    with path.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=COLUMNS, lineterminator="\n")
+        if is_new:
+            writer.writeheader()
+        writer.writerow(row)
+    return match
+
+
 def _load_file(path: Path) -> tuple[list[ParsedMatch], list[str]]:
     try:
         with path.open(newline="", encoding="utf-8") as f:
@@ -98,7 +117,7 @@ def _row_to_match(row: dict[str, str | None]) -> Match:
     winner = _parse_winner(v["winner"], result_type, (team_a, team_b))
     toss_winner, toss_decision = _parse_toss(v["toss_winner"], v["toss_decision"], (team_a, team_b))
     return Match(
-        match_id=f"man_{day.isoformat()}_{_slug(team_a)}_{_slug(team_b)}",
+        match_id=f"man_{day.isoformat()}_{team_slug(team_a)}_{team_slug(team_b)}",
         date=day,
         team_a=team_a,
         team_b=team_b,
@@ -167,10 +186,6 @@ def _parse_margin(value: str, column: str) -> int | None:
     if not value.isdigit():
         raise ManualRowError(f"{column} {value!r} is not a whole number")
     return int(value)
-
-
-def _slug(team: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", team.lower()).strip("-")
 
 
 def _fixture_key(match: Match) -> tuple[date, frozenset[str]]:

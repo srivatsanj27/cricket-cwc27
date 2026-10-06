@@ -154,3 +154,90 @@ def test_ingest_fails_cleanly_when_zip_missing(tmp_path, monkeypatch, capsys):
 
     assert exit_code == 1
     assert "not found" in capsys.readouterr().err
+
+
+FIXTURES_HEADER = "date,series,match_no,team_a,team_b,venue,city\n"
+
+
+def _setup_live(tmp_path, monkeypatch, cricsheet_zip):
+    """A data dir with past India v Australia ODIs and a two-match series in Mumbai."""
+    data = tmp_path / "data"
+    monkeypatch.setenv("CWC27_DATA_DIR", str(data))
+    data.mkdir()
+    (data / "fixtures.csv").write_text(
+        FIXTURES_HEADER
+        + "2026-10-12,Australia tour of India,1,India,Australia,Wankhede Stadium,Mumbai\n"
+        + "2026-10-15,Australia tour of India,2,India,Australia,Wankhede Stadium,Mumbai\n"
+    )
+    return cricsheet_zip(
+        {
+            "1": make_cricsheet_match(teams=("India", "Australia"), date="2024-01-01"),
+            "2": make_cricsheet_match(teams=("Australia", "India"), date="2024-02-01"),
+        }
+    )
+
+
+def test_result_records_a_match_using_the_fixture_venue(
+    tmp_path, monkeypatch, cricsheet_zip, capsys
+):
+    _setup_live(tmp_path, monkeypatch, cricsheet_zip)
+
+    exit_code = main(
+        ["result", "2026-10-12", "India", "Australia", "--winner", "India", "--runs", "25"]
+    )
+
+    assert exit_code == 0
+    assert "Recorded" in capsys.readouterr().out
+    recent = (tmp_path / "data" / "manual" / "recent.csv").read_text()
+    assert "2026-10-12,India,Australia,India,normal,25,,Wankhede Stadium,Mumbai" in recent
+    assert "Australia tour of India" in recent
+
+
+def test_result_rejects_a_duplicate(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    _setup_live(tmp_path, monkeypatch, cricsheet_zip)
+    args = ["result", "2026-10-12", "India", "Australia", "--tie"]
+    main(args)
+
+    exit_code = main(args)
+
+    assert exit_code == 1
+    assert "already" in capsys.readouterr().err
+
+
+def test_result_rejects_a_winner_who_did_not_play(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    _setup_live(tmp_path, monkeypatch, cricsheet_zip)
+
+    exit_code = main(["result", "2026-10-12", "India", "Australia", "--winner", "England"])
+
+    assert exit_code == 1
+    assert "winner" in capsys.readouterr().err
+
+
+def test_result_needs_exactly_one_outcome():
+    with pytest.raises(SystemExit) as exit_info:
+        main(["result", "2026-10-12", "India", "Australia"])
+
+    assert exit_info.value.code == 2
+
+
+def test_update_predicts_then_scores_after_a_result(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    zip_path = _setup_live(tmp_path, monkeypatch, cricsheet_zip)
+    log_path = tmp_path / "data" / "predictions_log.csv"
+
+    first = main(["update", "--zip", str(zip_path), "--today", "2026-10-10", "--sims", "500"])
+
+    out = capsys.readouterr().out
+    assert first == 0
+    assert "Upcoming" in out and "India" in out
+    assert "Australia tour of India" in out
+    assert log_path.read_text().count("\n") == 3  # header + two predictions
+
+    main(["result", "2026-10-12", "India", "Australia", "--winner", "India", "--wickets", "5"])
+    capsys.readouterr()
+    second = main(["update", "--zip", str(zip_path), "--today", "2026-10-13", "--sims", "500"])
+
+    out = capsys.readouterr().out
+    assert second == 0
+    assert "Scored" in out
+    assert "Track record: 1 match" in out
+    assert "1-0" in out  # series score so far
