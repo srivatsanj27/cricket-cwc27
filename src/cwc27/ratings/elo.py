@@ -50,6 +50,33 @@ def actual_score(match: Match, team: str) -> float | None:
         return 0.0
 
 
+def win_probability(
+    ratings: Mapping[str, float],
+    team_a: str,
+    team_b: str,
+    config: EloConfig,
+    home: str | None = None,
+) -> float:
+    """Probability that team_a beats team_b, before the match is played.
+
+    - Teams missing from `ratings` use `initial_rating`.
+    - The `home` side (if any) gets `config.home_advantage` added; use `config.scale`.
+    - Raise ValueError if team_a == team_b, or if `home` is set but isn't one of them.
+    """
+    if team_a == team_b:
+        raise ValueError(f"A team cannot play itself: {team_a!r}!")
+    if home is not None and home not in (team_a, team_b):
+        raise ValueError(f"The home team {home!r} is not {team_a!r} or {team_b!r}!")
+
+    rating_a = ratings.get(team_a, initial_rating(team_a, config))
+    rating_b = ratings.get(team_b, initial_rating(team_b, config))
+
+    predict_a = rating_a + (config.home_advantage if home == team_a else 0.0)
+    predict_b = rating_b + (config.home_advantage if home == team_b else 0.0)
+
+    return expected_score(predict_a, predict_b, config.scale)
+
+
 def update(
     ratings: Mapping[str, float],
     match: Match,
@@ -72,10 +99,7 @@ def update(
     if actual_a is None:
         return dict(ratings)  # a new dict, unchanged
 
-    predict_a = rating_a + (config.home_advantage if home == team_a else 0.0)
-    predict_b = rating_b + (config.home_advantage if home == team_b else 0.0)
-
-    expected_a = expected_score(predict_a, predict_b, config.scale)
+    expected_a = win_probability(ratings, team_a, team_b, config, home)
     delta = config.k * (actual_a - expected_a)
 
     new_ratings = dict(ratings)  # a copy of ratings
