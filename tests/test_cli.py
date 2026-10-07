@@ -4,7 +4,7 @@ import pytest
 
 from cwc27.cli import main
 from cwc27.store import MatchStore
-from tests.conftest import make_cricsheet_match
+from tests.conftest import ball, make_cricsheet_match
 
 
 def test_ingest_from_local_zip_loads_matches(tmp_path, monkeypatch, cricsheet_zip, capsys):
@@ -27,6 +27,27 @@ def test_ingest_from_local_zip_loads_matches(tmp_path, monkeypatch, cricsheet_zi
     assert "Skipped 1 file" in out
     assert "3.json" in out
     assert len(MatchStore(tmp_path / "data" / "processed" / "cwc27.duckdb").load_matches()) == 2
+
+
+def test_ingest_stores_deliveries_from_2019(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+    innings = [
+        {
+            "team": "Alphaland",
+            "overs": [{"over": 0, "deliveries": [ball("A Player1", "B Player1", runs=4)] * 3}],
+        }
+    ]
+    zip_path = cricsheet_zip(
+        {
+            "1": make_cricsheet_match(date="2018-01-01", innings=innings),
+            "2": make_cricsheet_match(date="2024-01-01", innings=innings),
+        }
+    )
+
+    main(["ingest", "--zip", str(zip_path)])
+
+    assert "Stored 3 deliveries" in capsys.readouterr().out
+    assert MatchStore(tmp_path / "data" / "processed" / "cwc27.duckdb").count_deliveries() == 3
 
 
 def test_ingest_merges_manual_results(tmp_path, monkeypatch, cricsheet_zip, capsys):

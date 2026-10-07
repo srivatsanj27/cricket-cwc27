@@ -260,7 +260,7 @@ def _run_ingest(zip_path: Path, download: bool) -> int:
         return 1
 
     try:
-        result = parse_zip(zip_path)
+        result = parse_zip(zip_path, deliveries_since=config.RATINGS_START)
     except (zipfile.BadZipFile, OSError) as exc:
         print(f"Could not read {zip_path}: {exc}", file=sys.stderr)
         return 1
@@ -285,6 +285,8 @@ def _run_ingest(zip_path: Path, download: bool) -> int:
         f"{len(merged) - len(result.parsed)} manual; "
         f"{in_window} since {config.WINDOW_START.isoformat()})"
     )
+    n_deliveries = sum(len(p.deliveries) for p in merged)
+    print(f"Stored {n_deliveries:,} deliveries from matches since {config.RATINGS_START}")
     if superseded:
         print(f"{len(superseded)} manual result(s) now covered by Cricsheet and can be removed:")
         for match_id in superseded:

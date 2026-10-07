@@ -19,6 +19,7 @@ def make_cricsheet_match(
     match_type="ODI",
     team_type="international",
     event=None,
+    innings=None,
 ):
     """Return a dict shaped like a Cricsheet JSON file (synthetic values only)."""
     team_a, team_b = teams
@@ -47,7 +48,23 @@ def make_cricsheet_match(
     }
     if event is not None:
         info["event"] = event
-    return {"meta": {"data_version": "1.1.0"}, "info": info, "innings": []}
+    return {"meta": {"data_version": "1.1.0"}, "info": info, "innings": innings or []}
+
+
+def ball(batter, bowler, runs=0, extras=None, wicket=None, non_striker="X Partner"):
+    """One synthetic Cricsheet delivery."""
+    extra_runs = sum((extras or {}).values())
+    delivery = {
+        "batter": batter,
+        "bowler": bowler,
+        "non_striker": non_striker,
+        "runs": {"batter": runs, "extras": extra_runs, "total": runs + extra_runs},
+    }
+    if extras:
+        delivery["extras"] = extras
+    if wicket:
+        delivery["wickets"] = [wicket]
+    return delivery
 
 
 @pytest.fixture
