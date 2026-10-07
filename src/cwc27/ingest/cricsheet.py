@@ -5,13 +5,15 @@ import shutil
 import ssl
 import urllib.request
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 import certifi
 
+from cwc27.ingest.deliveries import Delivery, parse_deliveries
+from cwc27.ingest.errors import ParseError
 from cwc27.models import Appearance, Match, ResultType
 from cwc27.teams import normalise_team
 
@@ -33,14 +35,11 @@ EXPECTED_SCOPE = {"gender": "male", "match_type": "ODI", "team_type": "internati
 DLS_METHODS = frozenset({"D/L", "DLS"})
 
 
-class ParseError(ValueError):
-    """A Cricsheet file is malformed or outside the project's scope."""
-
-
 @dataclass(frozen=True, slots=True)
 class ParsedMatch:
     match: Match
     appearances: tuple[Appearance, ...]
+    deliveries: tuple[Delivery, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,12 +48,19 @@ class ParseResult:
     errors: tuple[str, ...]
 
 
-def parse_match(data: Any, match_id: str) -> ParsedMatch:
+def parse_match(data: Any, match_id: str, with_deliveries: bool = False) -> ParsedMatch:
+    """One match; with `with_deliveries`, its ball-by-ball data too."""
     if not isinstance(data, dict) or not isinstance(data.get("info"), dict):
         raise ParseError("missing 'info' section")
     try:
         _validate(data["info"])
-        return _build(data["info"], match_id)
+        parsed = _build(data["info"], match_id)
+        if not with_deliveries:
+            return parsed
+        people = data["info"]["registry"].get("people", {})
+        teams = (parsed.match.team_a, parsed.match.team_b)
+        deliveries = parse_deliveries(data.get("innings") or [], people, teams, match_id)
+        return replace(parsed, deliveries=deliveries)
     except ParseError:
         raise
     except (KeyError, TypeError, AttributeError, IndexError, ValueError) as exc:
@@ -94,8 +100,11 @@ def _build(info: dict[str, Any], match_id: str) -> ParsedMatch:
     return ParsedMatch(match=match, appearances=_parse_appearances(info, match_id))
 
 
-def parse_zip(path: Path) -> ParseResult:
-    """Parse every match file in a Cricsheet zip; bad files are reported, not raised."""
+def parse_zip(path: Path, deliveries_since: date | None = None) -> ParseResult:
+    """Parse every match file in a Cricsheet zip; bad files are reported, not raised.
+
+    Ball-by-ball data is kept only for matches on or after `deliveries_since` (none if None).
+    """
     parsed: list[ParsedMatch] = []
     errors: list[str] = []
     with zipfile.ZipFile(path) as zf:
@@ -104,7 +113,11 @@ def parse_zip(path: Path) -> ParseResult:
                 continue
             try:
                 data = json.loads(zf.read(name))
-                parsed.append(parse_match(data, match_id=f"cs_{Path(name).stem}"))
+                wanted = deliveries_since is not None and _starts_on_or_after(
+                    data, deliveries_since
+                )
+                match_id = f"cs_{Path(name).stem}"
+                parsed.append(parse_match(data, match_id=match_id, with_deliveries=wanted))
             except (ParseError, json.JSONDecodeError, UnicodeDecodeError) as exc:
                 errors.append(f"{name}: {exc}")
     parsed.sort(key=lambda p: (p.match.date, p.match.match_id))
@@ -129,6 +142,14 @@ def download_odi_zip(dest: Path, url: str = ODI_MALE_ZIP_URL) -> Path:
     finally:
         partial.unlink(missing_ok=True)
     return dest
+
+
+def _starts_on_or_after(data: Any, day: date) -> bool:
+    """Peek at a file's first date; anything unreadable is left for parse_match to report."""
+    try:
+        return date.fromisoformat(data["info"]["dates"][0]) >= day
+    except (KeyError, IndexError, TypeError, ValueError):
+        return False
 
 
 def _validate(info: dict[str, Any]) -> None:

@@ -1,6 +1,9 @@
-"""DuckDB-backed storage for matches and playing XIs."""
+"""DuckDB-backed storage for matches, playing XIs and ball-by-ball deliveries."""
 
-from collections.abc import Iterable, Iterator
+import csv
+import os
+import tempfile
+from collections.abc import Iterable, Iterator, Sequence
 from contextlib import contextmanager
 from datetime import date
 from pathlib import Path
@@ -8,6 +11,7 @@ from pathlib import Path
 import duckdb
 
 from cwc27.ingest.cricsheet import ParsedMatch
+from cwc27.ingest.deliveries import Delivery
 from cwc27.models import Match, ResultType
 
 _CREATE_MATCHES = """
@@ -37,10 +41,47 @@ CREATE TABLE IF NOT EXISTS appearances (
     PRIMARY KEY (match_id, team, player_id)
 )
 """
-_MATCH_COLUMNS = (
-    "match_id, date, team_a, team_b, venue, city, toss_winner, toss_decision, winner, "
-    "result_type, margin_runs, margin_wickets, event, source"
+_CREATE_DELIVERIES = """
+CREATE TABLE IF NOT EXISTS deliveries (
+    match_id      VARCHAR NOT NULL,
+    innings       INTEGER NOT NULL,
+    batting_team  VARCHAR NOT NULL,
+    bowling_team  VARCHAR NOT NULL,
+    over_no       INTEGER NOT NULL,
+    ball          INTEGER NOT NULL,
+    phase         VARCHAR NOT NULL,
+    batter        VARCHAR NOT NULL,
+    batter_id     VARCHAR NOT NULL,
+    bowler        VARCHAR NOT NULL,
+    bowler_id     VARCHAR NOT NULL,
+    non_striker   VARCHAR NOT NULL,
+    runs_batter   INTEGER NOT NULL,
+    runs_extras   INTEGER NOT NULL,
+    runs_total    INTEGER NOT NULL,
+    wides         INTEGER NOT NULL,
+    noballs       INTEGER NOT NULL,
+    byes          INTEGER NOT NULL,
+    legbyes       INTEGER NOT NULL,
+    wickets       INTEGER NOT NULL,
+    wicket_kind   VARCHAR,
+    player_out    VARCHAR,
+    player_out_id VARCHAR,
+    fielder       VARCHAR
 )
+"""
+MATCH_COLUMNS = (
+    "match_id", "date", "team_a", "team_b", "venue", "city", "toss_winner", "toss_decision",
+    "winner", "result_type", "margin_runs", "margin_wickets", "event", "source",
+)  # fmt: skip
+APPEARANCE_COLUMNS = ("match_id", "team", "player_name", "player_id")
+DELIVERY_COLUMNS = (
+    "match_id", "innings", "batting_team", "bowling_team", "over_no", "ball", "phase",
+    "batter", "batter_id", "bowler", "bowler_id", "non_striker", "runs_batter",
+    "runs_extras", "runs_total", "wides", "noballs", "byes", "legbyes", "wickets", "wicket_kind",
+    "player_out", "player_out_id", "fielder",
+)  # fmt: skip
+# Child tables first, so a condition that reads `matches` still sees the rows it targets.
+_TABLES_BY_DELETE_ORDER = ("appearances", "deliveries", "matches")
 
 
 class MatchStore:
@@ -50,41 +91,65 @@ class MatchStore:
         with self._connect() as con:
             con.execute(_CREATE_MATCHES)
             con.execute(_CREATE_APPEARANCES)
+            con.execute(_CREATE_DELIVERIES)
 
     def save(self, parsed: Iterable[ParsedMatch], replace_source: str | None = None) -> None:
-        """Insert matches, replacing any already stored with the same match_id.
+        """Insert matches with their XIs and deliveries, replacing any with the same match_id.
 
         With `replace_source`, every stored match from that source is removed first, so
         rows edited out of (or superseded in) that source don't linger. All in one transaction.
         """
         items = list(parsed)
-        ids = [(p.match.match_id,) for p in items]
-        match_rows = [_match_to_row(p.match) for p in items]
-        appearance_rows = [
-            (a.match_id, a.team, a.player_name, a.player_id) for p in items for a in p.appearances
-        ]
         with self._transaction() as con:
             if replace_source is not None:
-                con.execute(
-                    "DELETE FROM appearances WHERE match_id IN "
-                    "(SELECT match_id FROM matches WHERE source = ?)",
+                _delete_matches(
+                    con,
+                    "match_id IN (SELECT match_id FROM matches WHERE source = ?)",
                     [replace_source],
                 )
-                con.execute("DELETE FROM matches WHERE source = ?", [replace_source])
             if not items:
                 return
-            con.executemany("DELETE FROM appearances WHERE match_id = ?", ids)
-            con.executemany("DELETE FROM matches WHERE match_id = ?", ids)
-            placeholders = ", ".join("?" * len(match_rows[0]))
-            con.executemany(
-                f"INSERT INTO matches ({_MATCH_COLUMNS}) VALUES ({placeholders})", match_rows
+            con.execute("CREATE OR REPLACE TEMP TABLE _saving (match_id VARCHAR)")
+            self._bulk_insert(con, "_saving", ("match_id",), [(p.match.match_id,) for p in items])
+            _delete_matches(con, "match_id IN (SELECT match_id FROM _saving)", [])
+            self._bulk_insert(con, "matches", MATCH_COLUMNS, [_match_row(p.match) for p in items])
+            self._bulk_insert(
+                con,
+                "appearances",
+                APPEARANCE_COLUMNS,
+                [
+                    (a.match_id, a.team, a.player_name, a.player_id)
+                    for p in items
+                    for a in p.appearances
+                ],
             )
-            if appearance_rows:
-                con.executemany(
-                    "INSERT INTO appearances (match_id, team, player_name, player_id) "
-                    "VALUES (?, ?, ?, ?)",
-                    appearance_rows,
-                )
+            self._bulk_insert(
+                con,
+                "deliveries",
+                DELIVERY_COLUMNS,
+                [_delivery_row(d) for p in items for d in p.deliveries],
+            )
+
+    def load_matches(self, since: date | None = None) -> list[Match]:
+        query = f"SELECT {', '.join(MATCH_COLUMNS)} FROM matches"
+        params: list[object] = []
+        if since is not None:
+            query += " WHERE date >= ?"
+            params.append(since)
+        query += " ORDER BY date, match_id"
+        with self._connect() as con:
+            rows = con.execute(query, params).fetchall()
+        return [_row_to_match(row) for row in rows]
+
+    def count_appearances(self) -> int:
+        return self._count("appearances")
+
+    def count_deliveries(self) -> int:
+        return self._count("deliveries")
+
+    def _count(self, table: str) -> int:
+        with self._connect() as con:
+            return con.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
 
     @contextmanager
     def _transaction(self) -> Iterator[duckdb.DuckDBPyConnection]:
@@ -97,29 +162,43 @@ class MatchStore:
                 raise
             con.execute("COMMIT")
 
-    def load_matches(self, since: date | None = None) -> list[Match]:
-        query = f"SELECT {_MATCH_COLUMNS} FROM matches"
-        params: list[object] = []
-        if since is not None:
-            query += " WHERE date >= ?"
-            params.append(since)
-        query += " ORDER BY date, match_id"
-        with self._connect() as con:
-            rows = con.execute(query, params).fetchall()
-        return [_row_to_match(row) for row in rows]
+    def _bulk_insert(
+        self,
+        con: duckdb.DuckDBPyConnection,
+        table: str,
+        columns: Sequence[str],
+        rows: Sequence[tuple],
+    ) -> None:
+        """Load rows through a temporary CSV and COPY: far faster than row-by-row inserts.
 
-    def count_appearances(self) -> int:
-        with self._connect() as con:
-            return con.execute("SELECT count(*) FROM appearances").fetchone()[0]
+        None is written as an empty field, which COPY reads back as NULL.
+        """
+        if not rows:
+            return
+        fd, name = tempfile.mkstemp(suffix=".csv", dir=self._path.parent)
+        try:
+            with os.fdopen(fd, "w", newline="", encoding="utf-8") as f:
+                csv.writer(f).writerows(rows)
+            quoted = name.replace("'", "''")
+            con.execute(
+                f"COPY {table} ({', '.join(columns)}) FROM '{quoted}' (FORMAT csv, HEADER false)"
+            )
+        finally:
+            os.unlink(name)
 
     def _connect(self) -> duckdb.DuckDBPyConnection:
         return duckdb.connect(str(self._path))
 
 
-def _match_to_row(m: Match) -> tuple:
+def _delete_matches(con: duckdb.DuckDBPyConnection, condition: str, params: list) -> None:
+    for table in _TABLES_BY_DELETE_ORDER:
+        con.execute(f"DELETE FROM {table} WHERE {condition}", params)
+
+
+def _match_row(m: Match) -> tuple:
     return (
         m.match_id,
-        m.date,
+        m.date.isoformat(),
         m.team_a,
         m.team_b,
         m.venue,
@@ -133,6 +212,15 @@ def _match_to_row(m: Match) -> tuple:
         m.event,
         m.source,
     )
+
+
+def _delivery_row(d: Delivery) -> tuple:
+    return (
+        d.match_id, d.innings, d.batting_team, d.bowling_team, d.over, d.ball, d.phase,
+        d.batter, d.batter_id, d.bowler, d.bowler_id, d.non_striker, d.runs_batter,
+        d.runs_extras, d.runs_total, d.wides, d.noballs, d.byes, d.legbyes, d.wickets,
+        d.wicket_kind, d.player_out, d.player_out_id, d.fielder,
+    )  # fmt: skip
 
 
 def _row_to_match(row: tuple) -> Match:
