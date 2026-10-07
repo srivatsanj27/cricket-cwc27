@@ -4,7 +4,7 @@ import pytest
 
 from cwc27.fixtures import Fixture
 from cwc27.models import ResultType
-from cwc27.simulate.forecast import series_outlooks
+from cwc27.simulate.forecast import series_outlooks, tri_series_outlooks
 from tests.test_backtest import make_match
 
 SERIES = "Pakistan tour of Sri Lanka"
@@ -83,3 +83,90 @@ def test_series_are_returned_in_order_of_their_first_match():
     outlooks = series_outlooks(fixtures, [], lambda f: 0.5, n_sims=100, seed=3)
 
     assert [o.series for o in outlooks] == [SERIES, "NZ tour of India"]
+
+
+TRI = "Tri-series"
+
+
+def tri_fixtures():
+    pairs = [("Pakistan", "Sri Lanka"), ("Pakistan", "England"), ("England", "Sri Lanka")]
+    return [
+        Fixture(date(2026, 10, 18 + i), TRI, i + 1, a, b, None, "Lahore")
+        for i, (a, b) in enumerate(pairs + pairs)
+    ]
+
+
+def test_tri_series_outlook_simulates_the_group_and_final():
+    (outlook,) = tri_series_outlooks(tri_fixtures(), [], lambda f: 0.5, n_sims=2_000, seed=1)
+
+    assert outlook.series == TRI
+    assert outlook.teams == ("England", "Pakistan", "Sri Lanka")
+    assert (outlook.played, outlook.remaining) == (0, 6)
+    assert sum(outlook.forecast.p_reach_final.values()) == pytest.approx(2.0)
+    assert sum(outlook.forecast.p_win.values()) == pytest.approx(1.0)
+
+
+def test_tri_series_results_so_far_are_fixed():
+    # Pakistan have already won both their first two matches.
+    played = [
+        make_match("Pakistan", "Sri Lanka", "Pakistan", date(2026, 10, 18)),
+        make_match("England", "Pakistan", "Pakistan", date(2026, 10, 19)),
+    ]
+
+    def pakistan_lose_the_rest(f):
+        return 0.0 if f.team_a == "Pakistan" else (1.0 if f.team_b == "Pakistan" else 0.5)
+
+    (outlook,) = tri_series_outlooks(
+        tri_fixtures(), played, pakistan_lose_the_rest, n_sims=2_000, seed=1
+    )
+
+    assert (outlook.played, outlook.remaining) == (2, 4)
+    # Two wins (4 points) can't guarantee the final once Pakistan lose the rest...
+    assert 0.0 < outlook.forecast.p_reach_final["Pakistan"] < 1.0
+
+
+def test_tri_series_washouts_and_ties_give_a_point_each():
+    played = [
+        make_match(
+            "Pakistan", "Sri Lanka", None, date(2026, 10, 18), result_type=ResultType.NO_RESULT
+        )
+    ]
+
+    (outlook,) = tri_series_outlooks(tri_fixtures(), played, lambda f: 0.5, n_sims=500, seed=1)
+
+    assert (outlook.played, outlook.remaining) == (1, 5)
+
+
+def test_tri_series_final_is_predicted_at_the_last_group_venue():
+    asked = []
+
+    def record(f):
+        asked.append(f)
+        return 0.5
+
+    tri_series_outlooks(tri_fixtures(), [], record, n_sims=50, seed=1)
+
+    finals = [f for f in asked if f.match_no == 0]
+    assert finals and all(f.city == "Lahore" for f in finals)
+
+
+def test_two_team_series_have_no_tri_series_outlook():
+    assert tri_series_outlooks([fx(12), fx(15)], [], lambda f: 0.5, n_sims=50, seed=1) == ()
+
+
+def test_tri_series_reads_results_whichever_team_order_they_were_recorded_in():
+    # Every group match played. Pakistan win all four; two are recorded England v
+    # Pakistan / Sri Lanka v Pakistan, the reverse of the fixture order.
+    played = [
+        make_match("Pakistan", "Sri Lanka", "Pakistan", date(2026, 10, 18)),
+        make_match("England", "Pakistan", "Pakistan", date(2026, 10, 19)),
+        make_match("England", "Sri Lanka", "England", date(2026, 10, 20)),
+        make_match("Sri Lanka", "Pakistan", "Pakistan", date(2026, 10, 21)),
+        make_match("Pakistan", "England", "Pakistan", date(2026, 10, 22)),
+        make_match("England", "Sri Lanka", "England", date(2026, 10, 23)),
+    ]
+
+    (outlook,) = tri_series_outlooks(tri_fixtures(), played, lambda f: 0.5, n_sims=200, seed=1)
+
+    assert outlook.remaining == 0
+    assert outlook.forecast.p_reach_final == {"England": 1.0, "Pakistan": 1.0, "Sri Lanka": 0.0}

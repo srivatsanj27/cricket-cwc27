@@ -8,7 +8,12 @@ from cwc27.evaluation.metrics import Summary
 from cwc27.fixtures import Fixture, fixture_home
 from cwc27.models import Match
 from cwc27.ratings.elo import EloConfig, run_elo, win_probability
-from cwc27.simulate.forecast import SeriesOutlook, series_outlooks
+from cwc27.simulate.forecast import (
+    SeriesOutlook,
+    TriSeriesOutlook,
+    series_outlooks,
+    tri_series_outlooks,
+)
 from cwc27.tracking.log import (
     LoggedPrediction,
     refresh_predictions,
@@ -25,6 +30,7 @@ class UpdateOutcome:
     upcoming: tuple[LoggedPrediction, ...]
     awaiting: tuple[LoggedPrediction, ...]  # match date passed, no result recorded yet
     outlooks: tuple[SeriesOutlook, ...]
+    tri_outlooks: tuple[TriSeriesOutlook, ...]
     record: Summary | None
 
 
@@ -62,11 +68,13 @@ def run_update(
     )
     refreshed = refresh_predictions(scored, fixtures, predict, model_name(config), today, now)
     outlooks = series_outlooks(fixtures, matches, lambda f: predict(f)[0], n_sims, seed)
+    tri_outlooks = tri_series_outlooks(fixtures, matches, lambda f: predict(f)[0], n_sims, seed)
     return UpdateOutcome(
         log=refreshed,
         newly_scored=newly_scored,
         upcoming=tuple(r for r in refreshed if r.date > today and r.result_type is None),
         awaiting=tuple(r for r in refreshed if r.date < today and r.result_type is None),
         outlooks=tuple(o for o in outlooks if o.remaining > 0),
+        tri_outlooks=tuple(o for o in tri_outlooks if o.remaining > 0),
         record=track_record(refreshed),
     )

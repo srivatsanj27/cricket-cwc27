@@ -4,6 +4,7 @@ import pytest
 
 from cwc27.fixtures import Fixture
 from cwc27.ratings.elo import EloConfig
+from cwc27.tracking.display import format_update
 from cwc27.tracking.update import run_update
 from tests.test_backtest import make_match
 
@@ -45,3 +46,37 @@ def test_past_predictions_without_a_result_are_flagged_as_awaiting():
     )
 
     assert [r.date for r in later.awaiting] == [date(2026, 10, 12)]
+
+
+def test_tri_series_fixtures_get_a_tri_series_outlook():
+    cities = {"Lahore": "Pakistan"}
+    pairs = [("Pakistan", "Sri Lanka"), ("Pakistan", "England"), ("England", "Sri Lanka")]
+    fixtures = [
+        Fixture(date(2026, 10, 18 + i), "Tri-series", i + 1, a, b, None, "Lahore")
+        for i, (a, b) in enumerate(pairs)
+    ]
+
+    outcome = run_update(
+        HISTORY, fixtures, (), EloConfig(), cities, date(2026, 10, 10), NOW, n_sims=200, seed=1
+    )
+
+    assert [o.series for o in outcome.tri_outlooks] == ["Tri-series"]
+    assert outcome.outlooks == ()
+
+
+def test_tri_series_outlook_is_displayed():
+    cities = {"Lahore": "Pakistan"}
+    pairs = [("Pakistan", "Sri Lanka"), ("Pakistan", "England"), ("England", "Sri Lanka")]
+    fixtures = [
+        Fixture(date(2026, 10, 18 + i), "Tri-series", i + 1, a, b, None, "Lahore")
+        for i, (a, b) in enumerate(pairs)
+    ]
+    outcome = run_update(
+        HISTORY, fixtures, (), EloConfig(), cities, date(2026, 10, 10), NOW, n_sims=200, seed=1
+    )
+
+    text = format_update(outcome)
+
+    assert "Tri-series outlook" in text
+    assert "0 of 3 group matches played" in text
+    assert "reach final:" in text and "win:" in text
