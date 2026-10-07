@@ -1,6 +1,6 @@
 """Plain-text summary printed by `cwc27 update`."""
 
-from cwc27.simulate.forecast import SeriesOutlook
+from cwc27.simulate.forecast import SeriesOutlook, TriSeriesOutlook
 from cwc27.tracking.log import LoggedPrediction
 from cwc27.tracking.update import UpdateOutcome
 
@@ -17,6 +17,10 @@ def format_update(outcome: UpdateOutcome) -> str:
             [_upcoming_line(r) for r in outcome.upcoming],
         ),
         _section("Series outlook", [_outlook_line(o) for o in outcome.outlooks]),
+        _section(
+            "Tri-series outlook (level on points: head-to-head, then a coin toss for NRR)",
+            [line for o in outcome.tri_outlooks for line in _tri_outlook_lines(o)],
+        ),
         _record_line(outcome),
     ]
     return "\n\n".join(s for s in sections if s)
@@ -51,6 +55,17 @@ def _outlook_line(outlook: SeriesOutlook) -> str:
         f"{outlook.remaining} to play -> {outlook.team_a} {f.p_a_wins_series:.0%} | "
         f"{outlook.team_b} {f.p_b_wins_series:.0%}{drawn}"
     )
+
+
+def _tri_outlook_lines(outlook: TriSeriesOutlook) -> list[str]:
+    f = outlook.forecast
+    order = sorted(outlook.teams, key=lambda team: -f.p_win[team])
+    total = outlook.played + outlook.remaining
+    return [
+        f"  {outlook.series} ({outlook.played} of {total} group matches played)",
+        "    reach final: " + " | ".join(f"{t} {f.p_reach_final[t]:.0%}" for t in order),
+        "    win:         " + " | ".join(f"{t} {f.p_win[t]:.0%}" for t in order),
+    ]
 
 
 def _record_line(outcome: UpdateOutcome) -> str:
