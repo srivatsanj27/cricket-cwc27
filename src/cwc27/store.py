@@ -141,6 +141,11 @@ class MatchStore:
             rows = con.execute(query, params).fetchall()
         return [_row_to_match(row) for row in rows]
 
+    def fetch(self, sql: str, params: Sequence[object] = ()) -> list[tuple]:
+        """Run a read-only query (parameters bound with ?) and return its rows."""
+        with self._connect() as con:
+            return con.execute(sql, list(params)).fetchall()
+
     def count_appearances(self) -> int:
         return self._count("appearances")
 
