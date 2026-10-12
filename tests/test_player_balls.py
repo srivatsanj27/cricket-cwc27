@@ -161,3 +161,11 @@ def test_opponent_averages_are_split_by_opponent_and_phase():
 
     assert averages[("Weak", "middle")] == PhaseAverage(3.0, 0.0)
     assert averages[("Strong", "middle")] == PhaseAverage(0.0, 1.0)
+
+
+def test_until_excludes_matches_on_or_after_it(store):
+    faced = load_faced(store, since=date(2018, 1, 1), until=date(2024, 3, 10))
+    bowled = load_bowled(store, since=date(2018, 1, 1), until=date(2024, 3, 10))
+
+    assert {f.match_id for f in faced} == {"cs_old"}
+    assert {b.match_id for b in bowled} == {"cs_old"}

@@ -151,7 +151,7 @@ def apply_overrides(
 
 
 _PROFILES_SQL = """
-WITH recent AS (SELECT match_id, date FROM matches WHERE date >= ?),
+WITH recent AS (SELECT match_id, date FROM matches WHERE date >= ? AND date < ?),
 apps AS (
     SELECT a.player_id, arg_max(a.player_name, r.date) AS name, arg_max(a.team, r.date) AS team,
            count(*) AS appearances, max(r.date) AS last_played
@@ -193,6 +193,8 @@ ORDER BY apps.team, apps.name
 """
 
 
-def load_profiles(store: MatchStore, since: date) -> Sequence[PlayerProfile]:
-    """One profile per player who appeared in a playing XI on or after `since`."""
-    return tuple(PlayerProfile(*row) for row in store.fetch(_PROFILES_SQL, [since]))
+def load_profiles(
+    store: MatchStore, since: date, until: date = date.max
+) -> Sequence[PlayerProfile]:
+    """One profile per player in a playing XI on or after `since` and before `until`."""
+    return tuple(PlayerProfile(*row) for row in store.fetch(_PROFILES_SQL, [since, until]))

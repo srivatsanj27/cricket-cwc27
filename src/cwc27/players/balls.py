@@ -59,7 +59,7 @@ SELECT d.match_id, m.date, d.phase, d.batter_id, d.batter, d.runs_batter,
                 AND d.wicket_kind NOT IN ({_quoted(NOT_DISMISSALS)}), FALSE),
        d.bowling_team
 FROM deliveries d JOIN matches m USING (match_id)
-WHERE d.wides = 0 AND m.date >= ?
+WHERE d.wides = 0 AND m.date >= ? AND m.date < ?
 ORDER BY m.date, d.match_id, d.innings, d.over_no, d.ball
 """
 
@@ -69,19 +69,19 @@ SELECT d.match_id, m.date, d.phase, d.bowler_id, d.bowler,
        COALESCE(d.wicket_kind IN ({_quoted(BOWLER_WICKETS)}), FALSE),
        d.batting_team
 FROM deliveries d JOIN matches m USING (match_id)
-WHERE m.date >= ?
+WHERE m.date >= ? AND m.date < ?
 ORDER BY m.date, d.match_id, d.innings, d.over_no, d.ball
 """
 
 
-def load_faced(store: MatchStore, since: date) -> tuple[FacedBall, ...]:
-    """Every ball faced in matches on or after `since`, in playing order."""
-    return tuple(FacedBall(*row) for row in store.fetch(_FACED_SQL, [since]))
+def load_faced(store: MatchStore, since: date, until: date = date.max) -> tuple[FacedBall, ...]:
+    """Every ball faced in matches on or after `since` and before `until`, in playing order."""
+    return tuple(FacedBall(*row) for row in store.fetch(_FACED_SQL, [since, until]))
 
 
-def load_bowled(store: MatchStore, since: date) -> tuple[BowledBall, ...]:
-    """Every delivery bowled in matches on or after `since`, in playing order."""
-    return tuple(BowledBall(*row) for row in store.fetch(_BOWLED_SQL, [since]))
+def load_bowled(store: MatchStore, since: date, until: date = date.max) -> tuple[BowledBall, ...]:
+    """Every delivery in matches on or after `since` and before `until`, in playing order."""
+    return tuple(BowledBall(*row) for row in store.fetch(_BOWLED_SQL, [since, until]))
 
 
 def faced_averages(faced: Iterable[FacedBall]) -> Mapping[str, PhaseAverage]:
