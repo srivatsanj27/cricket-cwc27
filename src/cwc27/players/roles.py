@@ -24,12 +24,11 @@ REGULAR_BOWLER_BALLS_PER_MATCH = 18  # three overs a match on average
 KEEPER_MAX_BALLS_PER_MATCH = 6
 TOP_ORDER = 7.5  # average batting position for an all-rounder
 MIN_BALLS_FOR_STYLE = 120
-# Keepers stand up to spinners, so stumpings off a bowler mark a spinner. Otherwise the
-# powerplay share separates them: spinners bowl 0-7% of their balls there, pacers 30%+.
-# Death overs don't help: in ODIs spinners bowl at the death too.
+# Keepers stand up to spinners, so stumpings off a bowler mark a spinner; pacers open the
+# bowling. A low powerplay share alone isn't enough: middle and death-overs pacers have one
+# too, and in ODIs spinners bowl at the death. Anything else is left for a known style.
 SPIN_STUMPING_WICKETS = 1
 PACE_POWERPLAY_SHARE = 0.25
-SPIN_POWERPLAY_MAX = 0.10
 
 
 class Role(StrEnum):
@@ -85,7 +84,7 @@ def guess_bowling_style(p: PlayerProfile) -> str | None:
     """'pace', 'spin', or None when there are too few balls or the signs disagree."""
     if p.balls_bowled < MIN_BALLS_FOR_STYLE:
         return None
-    if p.stumping_wickets >= SPIN_STUMPING_WICKETS or p.powerplay_share < SPIN_POWERPLAY_MAX:
+    if p.stumping_wickets >= SPIN_STUMPING_WICKETS:
         return "spin"
     if p.powerplay_share >= PACE_POWERPLAY_SHARE:
         return "pace"
@@ -96,8 +95,12 @@ def assign_roles(
     recent: Sequence[PlayerProfile],
     history: Sequence[PlayerProfile],
     overrides: Mapping[str, Override],
+    known_styles: Mapping[str, str] | None = None,
 ) -> Mapping[str, PlayerRole]:
     """Role from recent play; keeping and bowling style from the full history.
+
+    Bowling style comes from, in order: the overrides, `known_styles` (e.g. the styles
+    Wikipedia lists for past squad players), then the data-based guess.
 
     A player who has kept wicket before and barely bowls now is a keeper, even if someone
     else has had the gloves lately. Overrides are applied last.
@@ -109,7 +112,9 @@ def assign_roles(
         role = classify_role(p)
         if role is Role.BATTER and long_view.stumpings:
             role = Role.KEEPER
-        style = guess_bowling_style(long_view) if role in (Role.BOWLER, Role.ALL_ROUNDER) else None
+        style = None
+        if role in (Role.BOWLER, Role.ALL_ROUNDER):
+            style = (known_styles or {}).get(p.player_id) or guess_bowling_style(long_view)
         role, style = apply_overrides(p.player_id, role, style, overrides)
         roles[p.player_id] = PlayerRole(p.player_id, p.name, p.team, role, style)
     return MappingProxyType(roles)

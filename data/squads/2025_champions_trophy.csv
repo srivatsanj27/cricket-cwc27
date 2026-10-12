@@ -1,0 +1,119 @@
+tournament,team,wiki_name,player_id,cricsheet_name,keeper,role,bowling_style,withdrawn
+2025_champions_trophy,Bangladesh,Najmul Hossain Shanto,1274d7ab,Nazmul Hossain Shanto,False,,spin,False
+2025_champions_trophy,Bangladesh,Nasum Ahmed,37654b75,Nasum Ahmed,False,,spin,False
+2025_champions_trophy,Bangladesh,Taskin Ahmed,ef18b66e,Taskin Ahmed,False,,pace,False
+2025_champions_trophy,Bangladesh,Jaker Ali,cd56a813,Jaker Ali,True,,,False
+2025_champions_trophy,Bangladesh,Parvez Hossain Emon,489aaf0a,Parvez Hossain Emon,True,,,False
+2025_champions_trophy,Bangladesh,Tanzid Hasan,80fe764d,Tanzid Hasan,False,,,False
+2025_champions_trophy,Bangladesh,Rishad Hossain,5935d694,Rishad Hossain,False,,spin,False
+2025_champions_trophy,Bangladesh,Towhid Hridoy,9e52a414,Towhid Hridoy,False,,spin,False
+2025_champions_trophy,Bangladesh,Mahmudullah,bf1d7d3e,Mahmudullah,False,,spin,False
+2025_champions_trophy,Bangladesh,Mehidy Hasan Miraz,c58b0108,Mehedi Hasan Miraz,False,,spin,False
+2025_champions_trophy,Bangladesh,Mushfiqur Rahim,a94e08ea,Mushfiqur Rahim,True,,,False
+2025_champions_trophy,Bangladesh,Mustafizur Rahman,0a8fce53,Mustafizur Rahman,False,,pace,False
+2025_champions_trophy,Bangladesh,Nahid Rana,5318ee68,Nahid Rana,False,,pace,False
+2025_champions_trophy,Bangladesh,Tanzim Hasan Sakib,0b0cc297,Tanzim Hasan Sakib,False,,pace,False
+2025_champions_trophy,Bangladesh,Soumya Sarkar,4d9f9686,Soumya Sarkar,False,,pace,False
+2025_champions_trophy,India,Rohit Sharma,740742ef,RG Sharma,False,,spin,False
+2025_champions_trophy,India,Shubman Gill,b4b99816,Shubman Gill,False,,spin,False
+2025_champions_trophy,India,Varun Chakravarthy,5b7ab5a9,CV Varun,False,,spin,False
+2025_champions_trophy,India,Shreyas Iyer,85ec8e33,SS Iyer,False,,spin,False
+2025_champions_trophy,India,Ravindra Jadeja,fe93fd9d,RA Jadeja,False,,spin,False
+2025_champions_trophy,India,Virat Kohli,ba607b88,V Kohli,False,,pace,False
+2025_champions_trophy,India,Hardik Pandya,dbe50b21,HH Pandya,False,,pace,False
+2025_champions_trophy,India,Rishabh Pant,919a3be2,RR Pant,True,,,False
+2025_champions_trophy,India,Axar Patel,2e171977,AR Patel,False,,spin,False
+2025_champions_trophy,India,KL Rahul,b17e2f24,KL Rahul,True,,,False
+2025_champions_trophy,India,Harshit Rana,77b1aa15,Harshit Rana,False,,pace,False
+2025_champions_trophy,India,Mohammed Shami,8cf9814c,Mohammed Shami,False,,pace,False
+2025_champions_trophy,India,Arshdeep Singh,244048f6,Arshdeep Singh,False,,pace,False
+2025_champions_trophy,India,Washington Sundar,f19ccfad,Washington Sundar,False,,spin,False
+2025_champions_trophy,India,Kuldeep Yadav,8d2c70ad,Kuldeep Yadav,False,,spin,False
+2025_champions_trophy,India,Jasprit Bumrah,462411b3,JJ Bumrah,False,,pace,True
+2025_champions_trophy,New Zealand,Mitchell Santner,e4a0deae,MJ Santner,False,,spin,False
+2025_champions_trophy,New Zealand,Michael Bracewell,e38bce7a,MG Bracewell,False,,spin,False
+2025_champions_trophy,New Zealand,Mark Chapman,7fa12533,MS Chapman,False,,spin,False
+2025_champions_trophy,New Zealand,Devon Conway,df5a6881,DP Conway,True,,,False
+2025_champions_trophy,New Zealand,Jacob Duffy,dadbdb68,JA Duffy,False,,pace,False
+2025_champions_trophy,New Zealand,Matt Henry,e84ac20c,MJ Henry,False,,pace,False
+2025_champions_trophy,New Zealand,Kyle Jamieson,68c56d09,KA Jamieson,False,,pace,False
+2025_champions_trophy,New Zealand,Tom Latham,e824e6ee,TWM Latham,True,,pace,False
+2025_champions_trophy,New Zealand,Daryl Mitchell,eade4650,DJ Mitchell,False,,pace,False
+2025_champions_trophy,New Zealand,William O'Rourke,cb9b8664,W O'Rourke,False,,pace,False
+2025_champions_trophy,New Zealand,Glenn Phillips,9a46c4e5,GD Phillips,True,,spin,False
+2025_champions_trophy,New Zealand,Rachin Ravindra,ba5e1069,R Ravindra,False,,spin,False
+2025_champions_trophy,New Zealand,Nathan Smith,05b1aef8,NG Smith,False,,pace,False
+2025_champions_trophy,New Zealand,Kane Williamson,d027ba9f,KS Williamson,False,,spin,False
+2025_champions_trophy,New Zealand,Will Young,8afe73e2,WA Young,False,,,False
+2025_champions_trophy,New Zealand,Lockie Ferguson,2f9d0389,LH Ferguson,False,,pace,True
+2025_champions_trophy,New Zealand,Ben Sears,e1891e00,BV Sears,False,,pace,True
+2025_champions_trophy,Pakistan,Mohammad Rizwan,2f26ac1a,Mohammad Rizwan,True,,pace,False
+2025_champions_trophy,Pakistan,Salman Ali Agha,89c16049,Agha Salman,False,,spin,False
+2025_champions_trophy,Pakistan,Shaheen Afridi,45a7e761,Shaheen Shah Afridi,False,,pace,False
+2025_champions_trophy,Pakistan,Abrar Ahmed,abb7c76c,Abrar Ahmed,False,,spin,False
+2025_champions_trophy,Pakistan,Faheem Ashraf,bd4ea627,Faheem Ashraf,False,,pace,False
+2025_champions_trophy,Pakistan,Babar Azam,8a75e999,Babar Azam,False,,spin,False
+2025_champions_trophy,Pakistan,Kamran Ghulam,35f4cf7e,Kamran Ghulam,False,,spin,False
+2025_champions_trophy,Pakistan,Mohammad Hasnain,8596fe80,Mohammad Hasnain,False,,pace,False
+2025_champions_trophy,Pakistan,Usman Khan,bafb9238,Usman Khan (2),False,,spin,False
+2025_champions_trophy,Pakistan,Haris Rauf,24bb1c2f,Haris Rauf,False,,pace,False
+2025_champions_trophy,Pakistan,Khushdil Shah,fce581b5,Khushdil Shah,False,,spin,False
+2025_champions_trophy,Pakistan,Naseem Shah,9c9af282,Naseem Shah,False,,pace,False
+2025_champions_trophy,Pakistan,Saud Shakeel,d07c1b2f,Saud Shakeel,False,,spin,False
+2025_champions_trophy,Pakistan,Tayyab Tahir,431f8af4,Tayyab Tahir,False,,spin,False
+2025_champions_trophy,Pakistan,Imam-ul-Haq,40c041ea,Imam-ul-Haq,False,,spin,False
+2025_champions_trophy,Pakistan,Fakhar Zaman,1777c020,Fakhar Zaman,False,,spin,True
+2025_champions_trophy,Australia,Steve Smith,30a45b23,SPD Smith,False,,spin,False
+2025_champions_trophy,Australia,Sean Abbott,1a2676c5,SA Abbott,False,,pace,False
+2025_champions_trophy,Australia,Alex Carey,69d03465,AT Carey,True,,,False
+2025_champions_trophy,Australia,Cooper Connolly,fe366f34,C Connolly,False,,spin,False
+2025_champions_trophy,Australia,Ben Dwarshuis,e1b9f3a9,BJ Dwarshuis,False,,pace,False
+2025_champions_trophy,Australia,Nathan Ellis,9eb1455b,NT Ellis,False,,pace,False
+2025_champions_trophy,Australia,Jake Fraser-McGurk,9b6e1b3f,J Fraser-McGurk,False,,spin,False
+2025_champions_trophy,Australia,Aaron Hardie,d405c0d5,AM Hardie,False,,pace,False
+2025_champions_trophy,Australia,Travis Head,12b610c2,TM Head,False,,spin,False
+2025_champions_trophy,Australia,Josh Inglis,989889ff,JP Inglis,True,,,False
+2025_champions_trophy,Australia,Spencer Johnson,83c3e8e3,SH Johnson,False,,pace,False
+2025_champions_trophy,Australia,Marnus Labuschagne,fa433be6,M Labuschagne,False,,spin,False
+2025_champions_trophy,Australia,Glenn Maxwell,b681e71e,GJ Maxwell,False,,spin,False
+2025_champions_trophy,Australia,Tanveer Sangha,52c952d9,T Sangha,False,,spin,False
+2025_champions_trophy,Australia,Adam Zampa,14f96089,A Zampa,False,,spin,False
+2025_champions_trophy,Australia,Pat Cummins,ded9240e,PJ Cummins,False,,pace,True
+2025_champions_trophy,Australia,Josh Hazlewood,03806cf8,JR Hazlewood,False,,pace,True
+2025_champions_trophy,Australia,Mitchell Marsh,3d8feaf8,MR Marsh,False,,pace,True
+2025_champions_trophy,Australia,Mitchell Starc,3fb19989,MA Starc,False,,pace,True
+2025_champions_trophy,Australia,Marcus Stoinis,d9273ee7,MP Stoinis,False,,pace,True
+2025_champions_trophy,Australia,Matthew Short,a90e53ec,MW Short,False,,spin,True
+2025_champions_trophy,England,Jos Buttler,99b75528,JC Buttler,True,,,False
+2025_champions_trophy,England,Rehan Ahmed,0ecb4de6,Rehan Ahmed,False,,spin,False
+2025_champions_trophy,England,Jofra Archer,5574750c,JC Archer,False,,pace,False
+2025_champions_trophy,England,Gus Atkinson,70d57519,AAP Atkinson,False,,pace,False
+2025_champions_trophy,England,Tom Banton,25f7b7d6,T Banton,False,,spin,False
+2025_champions_trophy,England,Harry Brook,4ae1755b,HC Brook,False,,pace,False
+2025_champions_trophy,England,Ben Duckett,5f26f677,BM Duckett,False,,,False
+2025_champions_trophy,England,Liam Livingstone,50c6bc2b,LS Livingstone,False,,spin,False
+2025_champions_trophy,England,Saqib Mahmood,0f6db197,S Mahmood,False,,pace,False
+2025_champions_trophy,England,Jamie Overton,59559bc2,J Overton,False,,pace,False
+2025_champions_trophy,England,Adil Rashid,249d60c9,AU Rashid,False,,spin,False
+2025_champions_trophy,England,Joe Root,a343262c,JE Root,False,,spin,False
+2025_champions_trophy,England,Phil Salt,3d284ca3,PD Salt,True,,,False
+2025_champions_trophy,England,Jamie Smith,c834c290,JL Smith,True,,,False
+2025_champions_trophy,England,Mark Wood,8d92a2c3,MA Wood,False,,pace,False
+2025_champions_trophy,England,Jacob Bethell,3c55c703,JG Bethell,False,,spin,True
+2025_champions_trophy,England,Brydon Carse,cad40f5e,BA Carse,False,,pace,True
+2025_champions_trophy,South Africa,Temba Bavuma,9ffd1ac1,T Bavuma,False,,pace,False
+2025_champions_trophy,South Africa,Corbin Bosch,172dff15,C Bosch,False,,pace,False
+2025_champions_trophy,South Africa,Tony de Zorzi,d3a1c63d,T de Zorzi,False,,,False
+2025_champions_trophy,South Africa,Marco Jansen,81c36ee9,M Jansen,False,,pace,False
+2025_champions_trophy,South Africa,Heinrich Klaasen,235c2bb6,H Klaasen,True,,,False
+2025_champions_trophy,South Africa,Keshav Maharaj,0b60eb09,KA Maharaj,False,,spin,False
+2025_champions_trophy,South Africa,Aiden Markram,6a26221c,AK Markram,False,,spin,False
+2025_champions_trophy,South Africa,David Miller,d67d5f00,DA Miller,False,,,False
+2025_champions_trophy,South Africa,Wiaan Mulder,c96f6ac5,PWA Mulder,False,,pace,False
+2025_champions_trophy,South Africa,Lungi Ngidi,f834dcfc,L Ngidi,False,,pace,False
+2025_champions_trophy,South Africa,Kagiso Rabada,e62dd25d,K Rabada,False,,pace,False
+2025_champions_trophy,South Africa,Ryan Rickelton,e66732f8,RD Rickelton,True,,,False
+2025_champions_trophy,South Africa,Tabraiz Shamsi,a03bba42,T Shamsi,False,,spin,False
+2025_champions_trophy,South Africa,Tristan Stubbs,85b3fab2,T Stubbs,False,,spin,False
+2025_champions_trophy,South Africa,Rassie van der Dussen,9948e262,HE van der Dussen,False,,spin,False
+2025_champions_trophy,South Africa,Anrich Nortje,acdc62f5,A Nortje,False,,pace,True

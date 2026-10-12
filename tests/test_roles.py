@@ -73,10 +73,11 @@ def test_opening_the_bowling_marks_a_pacer():
     assert guess_bowling_style(p) == "pace"
 
 
-def test_rarely_bowling_in_the_powerplay_marks_a_spinner_even_at_the_death():
+def test_rarely_bowling_in_the_powerplay_is_not_enough_to_call_a_spinner():
+    # Middle and death-overs pacers (Pathirana, Coetzee) rarely bowl in the powerplay too.
     p = profile(balls_bowled=1200, powerplay_share=0.02, death_share=0.2)
 
-    assert guess_bowling_style(p) == "spin"
+    assert guess_bowling_style(p) is None
 
 
 def test_a_powerplay_share_in_between_is_left_for_an_override():
@@ -174,3 +175,14 @@ def test_assign_roles_applies_overrides_last():
     roles = assign_roles([profile()], [profile()], overrides)
 
     assert (roles["p"].role, roles["p"].bowling_style) == (Role.ALL_ROUNDER, "spin")
+
+
+def test_known_styles_beat_the_guess_but_not_overrides():
+    pacer = profile(player_id="p", balls_bowled=20 * 50, batting_position=10.0)
+    spinner = profile(player_id="s", balls_bowled=20 * 50, batting_position=10.0)
+    overrides = {"s": Override(None, "pace")}
+
+    roles = assign_roles([pacer, spinner], [pacer, spinner], overrides, {"p": "pace", "s": "spin"})
+
+    assert roles["p"].bowling_style == "pace"
+    assert roles["s"].bowling_style == "pace"  # the override wins

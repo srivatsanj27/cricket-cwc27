@@ -1,0 +1,148 @@
+tournament,team,wiki_name,player_id,cricsheet_name,keeper,role,bowling_style,withdrawn
+2023_world_cup,Australia,Pat Cummins,ded9240e,PJ Cummins,False,Bowler,pace,False
+2023_world_cup,Australia,Sean Abbott,1a2676c5,SA Abbott,False,Bowler,pace,False
+2023_world_cup,Australia,Alex Carey,69d03465,AT Carey,True,Wicket-keeper,,False
+2023_world_cup,Australia,Cameron Green,eaa76d3c,C Green,False,All-rounder,pace,False
+2023_world_cup,Australia,Josh Hazlewood,03806cf8,JR Hazlewood,False,Bowler,pace,False
+2023_world_cup,Australia,Travis Head,12b610c2,TM Head,False,Batsman,spin,False
+2023_world_cup,Australia,Josh Inglis,989889ff,JP Inglis,True,Wicket-keeper,,False
+2023_world_cup,Australia,Marnus Labuschagne,fa433be6,M Labuschagne,False,All-rounder,spin,False
+2023_world_cup,Australia,Mitchell Marsh,3d8feaf8,MR Marsh,False,All-rounder,pace,False
+2023_world_cup,Australia,Glenn Maxwell,b681e71e,GJ Maxwell,False,All-rounder,spin,False
+2023_world_cup,Australia,Steve Smith,30a45b23,SPD Smith,False,Batsman,spin,False
+2023_world_cup,Australia,Mitchell Starc,3fb19989,MA Starc,False,Bowler,pace,False
+2023_world_cup,Australia,Marcus Stoinis,d9273ee7,MP Stoinis,False,All-rounder,pace,False
+2023_world_cup,Australia,David Warner,dcce6f09,DA Warner,False,Batsman,spin,False
+2023_world_cup,Australia,Adam Zampa,14f96089,A Zampa,False,Bowler,spin,False
+2023_world_cup,Australia,Ashton Agar,a2421394,AC Agar,False,All-rounder,spin,True
+2023_world_cup,Bangladesh,Najmul Hossain Shanto,1274d7ab,Nazmul Hossain Shanto,False,Batsman,spin,False
+2023_world_cup,Bangladesh,Nasum Ahmed,37654b75,Nasum Ahmed,False,Bowler,spin,False
+2023_world_cup,Bangladesh,Taskin Ahmed,ef18b66e,Taskin Ahmed,False,Bowler,pace,False
+2023_world_cup,Bangladesh,Litton Das,0404d43c,Liton Das,False,Wicket-keeper,spin,False
+2023_world_cup,Bangladesh,Anamul Haque,72b245dd,Anamul Haque,False,Wicket-keeper,pace,False
+2023_world_cup,Bangladesh,Tanzim Hasan Sakib,0b0cc297,Tanzim Hasan Sakib,False,Bowler,pace,False
+2023_world_cup,Bangladesh,Tanzid Hasan,80fe764d,Tanzid Hasan,False,Batsman,,False
+2023_world_cup,Bangladesh,Towhid Hridoy,9e52a414,Towhid Hridoy,False,Batsman,spin,False
+2023_world_cup,Bangladesh,Mahedi Hasan,9dad0f2e,Mahedi Hasan,False,All-rounder,spin,False
+2023_world_cup,Bangladesh,Mehidy Hasan,9dad0f2e,Mahedi Hasan,False,All-rounder,spin,False
+2023_world_cup,Bangladesh,Shoriful Islam,bb34fd31,Shoriful Islam,False,Bowler,pace,False
+2023_world_cup,Bangladesh,Mahmudullah,bf1d7d3e,Mahmudullah,False,Batsman,spin,False
+2023_world_cup,Bangladesh,Hasan Mahmud,80ad39ac,Hasan Mahmud,False,Bowler,pace,False
+2023_world_cup,Bangladesh,Mushfiqur Rahim,a94e08ea,Mushfiqur Rahim,True,Wicket-keeper,pace,False
+2023_world_cup,Bangladesh,Mustafizur Rahman,0a8fce53,Mustafizur Rahman,False,Bowler,pace,False
+2023_world_cup,Bangladesh,Shakib Al Hasan,7dc35884,Shakib Al Hasan,False,All-rounder,spin,False
+2023_world_cup,England,Jos Buttler,99b75528,JC Buttler,True,Wicket-keeper,,False
+2023_world_cup,England,Moeen Ali,bb351c23,MM Ali,False,All-rounder,spin,False
+2023_world_cup,England,Gus Atkinson,70d57519,AAP Atkinson,False,Bowler,pace,False
+2023_world_cup,England,Jonny Bairstow,abb83e27,JM Bairstow,False,Wicket-keeper,,False
+2023_world_cup,England,Harry Brook,4ae1755b,HC Brook,False,Batsman,pace,False
+2023_world_cup,England,Brydon Carse,cad40f5e,BA Carse,False,Bowler,pace,False
+2023_world_cup,England,Sam Curran,e94915e6,SM Curran,False,Bowler,pace,False
+2023_world_cup,England,Liam Livingstone,50c6bc2b,LS Livingstone,False,Batsman,spin,False
+2023_world_cup,England,Dawid Malan,ad9c32a2,DJ Malan,False,Batsman,spin,False
+2023_world_cup,England,Adil Rashid,249d60c9,AU Rashid,False,Bowler,spin,False
+2023_world_cup,England,Joe Root,a343262c,JE Root,False,Batsman,spin,False
+2023_world_cup,England,Ben Stokes,e087956b,BA Stokes,False,All-rounder,pace,False
+2023_world_cup,England,David Willey,7f048519,DJ Willey,False,All-rounder,pace,False
+2023_world_cup,England,Chris Woakes,4c5d73db,CR Woakes,False,All-rounder,pace,False
+2023_world_cup,England,Mark Wood,8d92a2c3,MA Wood,False,Bowler,pace,False
+2023_world_cup,England,Reece Topley,8db7f47f,RJW Topley,False,Bowler,pace,True
+2023_world_cup,India,Rohit Sharma,740742ef,RG Sharma,False,Batsman,spin,False
+2023_world_cup,India,Ravichandran Ashwin,495d42a5,R Ashwin,False,All-rounder,spin,False
+2023_world_cup,India,Jasprit Bumrah,462411b3,JJ Bumrah,False,Bowler,pace,False
+2023_world_cup,India,Shubman Gill,b4b99816,Shubman Gill,False,Batsman,spin,False
+2023_world_cup,India,Shreyas Iyer,85ec8e33,SS Iyer,False,Batsman,spin,False
+2023_world_cup,India,Ravindra Jadeja,fe93fd9d,RA Jadeja,False,All-rounder,spin,False
+2023_world_cup,India,Ishan Kishan,752f7486,Ishan Kishan,True,Wicket-keeper,,False
+2023_world_cup,India,Virat Kohli,ba607b88,V Kohli,False,Batsman,pace,False
+2023_world_cup,India,Prasidh Krishna,85e0cf10,M Prasidh Krishna,False,Bowler,pace,False
+2023_world_cup,India,K. L. Rahul,b17e2f24,KL Rahul,True,Wicket keeper,pace,False
+2023_world_cup,India,Mohammed Shami,8cf9814c,Mohammed Shami,False,Bowler,pace,False
+2023_world_cup,India,Mohammed Siraj,2f49c897,Mohammed Siraj,False,Bowler,pace,False
+2023_world_cup,India,Shardul Thakur,1abb78f8,SN Thakur,False,All-rounder,pace,False
+2023_world_cup,India,Kuldeep Yadav,8d2c70ad,Kuldeep Yadav,False,Bowler,spin,False
+2023_world_cup,India,Suryakumar Yadav,271f83cd,SA Yadav,False,Batsman,spin,False
+2023_world_cup,India,Axar Patel,2e171977,AR Patel,False,All-rounder,spin,True
+2023_world_cup,India,Hardik Pandya,dbe50b21,HH Pandya,False,All-rounder,pace,True
+2023_world_cup,Netherlands,Scott Edwards,b59db04f,SA Edwards,True,Wicket-keeper,,False
+2023_world_cup,Netherlands,Colin Ackermann,e734d090,CN Ackermann,False,Batsman,spin,False
+2023_world_cup,Netherlands,Shariz Ahmad,7595b47f,Shariz Ahmad,False,Bowler,spin,False
+2023_world_cup,Netherlands,Wesley Barresi,0d677597,W Barresi,False,Batsman,spin,False
+2023_world_cup,Netherlands,Bas de Leede,fc4375ef,BFW de Leede,False,All-rounder,pace,False
+2023_world_cup,Netherlands,Noah Croes,f427e63e,NRJ Croes,False,Batsman,,False
+2023_world_cup,Netherlands,Aryan Dutt,803dbf1d,A Dutt,False,Bowler,spin,False
+2023_world_cup,Netherlands,Sybrand Engelbrecht,81a0e294,SA Engelbrecht,False,Batsman,spin,False
+2023_world_cup,Netherlands,Teja Nidamanuru,a319edf8,AT Nidamanuru,False,Batsman,spin,False
+2023_world_cup,Netherlands,Max O'Dowd,b699df47,MP O'Dowd,False,Batsman,spin,False
+2023_world_cup,Netherlands,Vikramjit Singh,2a9eee66,Vikramjit Singh,False,Batsman,spin,False
+2023_world_cup,Netherlands,Logan van Beek,782fb776,LV van Beek,False,All-rounder,pace,False
+2023_world_cup,Netherlands,Paul van Meekeren,4557dc54,PA van Meekeren,False,Bowler,pace,False
+2023_world_cup,Netherlands,Roelof van der Merwe,05c2ca46,RE van der Merwe,False,All-rounder,spin,False
+2023_world_cup,Netherlands,Saqib Zulfiqar,5d38476c,Saqib Zulfiqar,False,All-rounder,spin,False
+2023_world_cup,Netherlands,Ryan Klein,ff1ec94d,R Klein,False,Bowler,pace,True
+2023_world_cup,New Zealand,Kane Williamson,d027ba9f,KS Williamson,False,Batsman,spin,False
+2023_world_cup,New Zealand,Tom Latham,e824e6ee,TWM Latham,True,Wicket-keeper,pace,False
+2023_world_cup,New Zealand,Trent Boult,a818c1be,TA Boult,False,Bowler,pace,False
+2023_world_cup,New Zealand,Mark Chapman,7fa12533,MS Chapman,False,Batsman,spin,False
+2023_world_cup,New Zealand,Devon Conway,df5a6881,DP Conway,False,Wicket-keeper,pace,False
+2023_world_cup,New Zealand,Lockie Ferguson,2f9d0389,LH Ferguson,False,Bowler,pace,False
+2023_world_cup,New Zealand,Kyle Jamieson,68c56d09,KA Jamieson,False,Bowler,pace,False
+2023_world_cup,New Zealand,Daryl Mitchell,eade4650,DJ Mitchell,False,All-rounder,pace,False
+2023_world_cup,New Zealand,James Neesham,9219eff0,JDS Neesham,False,All-rounder,pace,False
+2023_world_cup,New Zealand,Glenn Phillips,9a46c4e5,GD Phillips,False,Batsman,spin,False
+2023_world_cup,New Zealand,Rachin Ravindra,ba5e1069,R Ravindra,False,All-rounder,spin,False
+2023_world_cup,New Zealand,Mitchell Santner,e4a0deae,MJ Santner,False,All-rounder,spin,False
+2023_world_cup,New Zealand,Ish Sodhi,641ac5ff,IS Sodhi,False,Bowler,spin,False
+2023_world_cup,New Zealand,Tim Southee,13c35c9e,TG Southee,False,Bowler,pace,False
+2023_world_cup,New Zealand,Will Young,8afe73e2,WA Young,False,Batsman,spin,False
+2023_world_cup,New Zealand,Matt Henry,e84ac20c,MJ Henry,False,Bowler,pace,True
+2023_world_cup,Pakistan,Babar Azam,8a75e999,Babar Azam,False,Batsman,spin,False
+2023_world_cup,Pakistan,Shadab Khan,9de62878,Shadab Khan,False,All-rounder,spin,False
+2023_world_cup,Pakistan,Shaheen Afridi,45a7e761,Shaheen Shah Afridi,False,Bowler,pace,False
+2023_world_cup,Pakistan,Ifitkhar Ahmed,29e253dd,Iftikhar Ahmed,False,Batsman,spin,False
+2023_world_cup,Pakistan,Hasan Ali,2911de16,Hasan Ali,False,Bowler,pace,False
+2023_world_cup,Pakistan,Salman Ali Agha,89c16049,Agha Salman,False,Batsman,spin,False
+2023_world_cup,Pakistan,Usama Mir,6dd8b88c,Usama Mir,False,Bowler,spin,False
+2023_world_cup,Pakistan,Mohammad Nawaz,3086f7a4,Mohammad Nawaz,False,All-rounder,spin,False
+2023_world_cup,Pakistan,Haris Rauf,24bb1c2f,Haris Rauf,False,Bowler,pace,False
+2023_world_cup,Pakistan,Mohammad Rizwan,2f26ac1a,Mohammad Rizwan,True,Wicket-keeper,pace,False
+2023_world_cup,Pakistan,Abdullah Shafique,fc2fffb5,Abdullah Shafique,False,Batsman,spin,False
+2023_world_cup,Pakistan,Saud Shakeel,d07c1b2f,Saud Shakeel,False,Batsman,spin,False
+2023_world_cup,Pakistan,Imam-ul-Haq,40c041ea,Imam-ul-Haq,False,Batsman,spin,False
+2023_world_cup,Pakistan,Mohammad Wasim Jr.,9e9af5f2,Mohammad Wasim,False,Bowler,pace,False
+2023_world_cup,Pakistan,Fakhar Zaman,1777c020,Fakhar Zaman,False,Batsman,spin,False
+2023_world_cup,South Africa,Temba Bavuma,9ffd1ac1,T Bavuma,False,Batsman,pace,False
+2023_world_cup,South Africa,Keshav Maharaj,0b60eb09,KA Maharaj,False,Bowler,spin,False
+2023_world_cup,South Africa,Gerald Coetzee,3204c99f,G Coetzee,False,Bowler,pace,False
+2023_world_cup,South Africa,Quinton de Kock,372455c4,Q de Kock,True,Wicket-keeper,,False
+2023_world_cup,South Africa,Reeza Hendricks,b8cc58c9,RR Hendricks,False,Batsman,spin,False
+2023_world_cup,South Africa,Marco Jansen,81c36ee9,M Jansen,False,All-rounder,pace,False
+2023_world_cup,South Africa,Heinrich Klaasen,235c2bb6,H Klaasen,True,Wicket-keeper,spin,False
+2023_world_cup,South Africa,Aiden Markram,6a26221c,AK Markram,False,Batsman,spin,False
+2023_world_cup,South Africa,David Miller,d67d5f00,DA Miller,False,Batsman,spin,False
+2023_world_cup,South Africa,Lungi Ngidi,f834dcfc,L Ngidi,False,Bowler,pace,False
+2023_world_cup,South Africa,Andile Phehlukwayo,ab6b1c45,AL Phehlukwayo,False,All-rounder,pace,False
+2023_world_cup,South Africa,Kagiso Rabada,e62dd25d,K Rabada,False,Bowler,pace,False
+2023_world_cup,South Africa,Tabraiz Shamsi,a03bba42,T Shamsi,False,Bowler,spin,False
+2023_world_cup,South Africa,Lizaad Williams,a1d95bd8,LB Williams,False,Bowler,pace,False
+2023_world_cup,South Africa,Rassie van der Dussen,9948e262,HE van der Dussen,False,Batsman,spin,False
+2023_world_cup,South Africa,Sisanda Magala,8361e524,SSB Magala,False,Bowler,pace,True
+2023_world_cup,South Africa,Anrich Nortje,acdc62f5,A Nortje,False,Bowler,pace,True
+2023_world_cup,Sri Lanka,Kusal Mendis,5d1e7582,BKG Mendis,True,Wicket-keeper,spin,False
+2023_world_cup,Sri Lanka,Charith Asalanka,732c038e,KIC Asalanka,False,Batsman,spin,False
+2023_world_cup,Sri Lanka,Dushmantha Chameera,327b58d3,PVD Chameera,False,Bowler,pace,False
+2023_world_cup,Sri Lanka,Dhananjaya de Silva,7d608e12,DM de Silva,False,Batsman,pace,False
+2023_world_cup,Sri Lanka,Dushan Hemantha,58431ca0,MADI Hemantha,False,All-rounder,spin,False
+2023_world_cup,Sri Lanka,Chamika Karunaratne,fb3e0d39,C Karunaratne,False,All-rounder,pace,False
+2023_world_cup,Sri Lanka,Dimuth Karunaratne,400e2d4d,FDM Karunaratne,False,All-rounder,spin,False
+2023_world_cup,Sri Lanka,Dilshan Madushanka,de7d833e,D Madushanka,False,Bowler,pace,False
+2023_world_cup,Sri Lanka,Angelo Mathews,896d78ad,AD Mathews,False,All-rounder,pace,False
+2023_world_cup,Sri Lanka,Pathum Nissanka,8ee36b18,P Nissanka,False,Batsman,,False
+2023_world_cup,Sri Lanka,Kusal Perera,f21043a5,MDKJ Perera,False,Wicket-keeper,pace,False
+2023_world_cup,Sri Lanka,Kasun Rajitha,8012d0b8,CAK Rajitha,False,Bowler,pace,False
+2023_world_cup,Sri Lanka,Sadeera Samarawickrama,9ab2914d,S Samarawickrama,False,Wicket-keeper,,False
+2023_world_cup,Sri Lanka,Maheesh Theekshana,f24c6701,M Theekshana,False,Bowler,spin,False
+2023_world_cup,Sri Lanka,Dunith Wellalage,736123bb,DN Wellalage,False,All-rounder,spin,False
+2023_world_cup,Sri Lanka,Dasun Shanaka,3ff033bb,MD Shanaka,False,All-rounder,pace,True
+2023_world_cup,Sri Lanka,Matheesha Pathirana,64839cb3,M Pathirana,False,Bowler,pace,True
+2023_world_cup,Sri Lanka,Lahiru Kumara,4751caa3,CBRLS Kumara,False,Bowler,pace,True
