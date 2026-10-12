@@ -1,7 +1,7 @@
 """Predict squads as of a date, and score predictions against squads that were announced."""
 
 import csv
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -15,6 +15,8 @@ from cwc27.store import MatchStore
 
 ROLE_WINDOW_DAYS = 730  # roles come from the last two years of play
 SELECTION_WINDOW_DAYS = 365  # selection share comes from the last year
+CERTAIN_PICKS_CSV = Path(__file__).resolve().parents[3] / "config" / "certain_picks.csv"
+CERTAIN_PICK_COLUMNS = ("player_id", "name", "team")
 
 
 @dataclass(frozen=True, slots=True)
@@ -22,6 +24,15 @@ class SquadInputs:
     roles: Mapping[str, PlayerRole]
     ratings: Mapping[str, PlayerRating]
     shares: Mapping[tuple[str, str], float]
+
+
+@dataclass(frozen=True, slots=True)
+class CertainPick:
+    """A star who goes to a World Cup whenever fit, however few recent games they've played."""
+
+    player_id: str
+    name: str
+    team: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,8 +109,39 @@ def team_candidates(team: str, inputs: SquadInputs) -> tuple[Candidate, ...]:
     return tuple(out)
 
 
-def predict_squad(team: str, inputs: SquadInputs, rules: SquadRules) -> tuple[Candidate, ...]:
-    return pick_squad(team_candidates(team, inputs), rules)
+def predict_squad(
+    team: str, inputs: SquadInputs, rules: SquadRules, certain: Collection[str] = frozenset()
+) -> tuple[Candidate, ...]:
+    return pick_squad(team_candidates(team, inputs), rules, certain)
+
+
+def load_certain_picks(teams: Collection[str], path: Path | None = None) -> tuple[CertainPick, ...]:
+    """Hand-kept certain picks; a missing file means none. Bad headers or rows raise."""
+    path = path or CERTAIN_PICKS_CSV
+    if not path.exists():
+        return ()
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        if tuple(reader.fieldnames or ()) != CERTAIN_PICK_COLUMNS:
+            raise ValueError(f"{path.name}: header must be {','.join(CERTAIN_PICK_COLUMNS)}")
+        return tuple(_certain_pick(row, teams, f"{path.name}:{reader.line_num}") for row in reader)
+
+
+def _certain_pick(row: Mapping[str, str | None], teams: Collection[str], where: str) -> CertainPick:
+    pid, name, team = ((row[col] or "").strip() for col in CERTAIN_PICK_COLUMNS)
+    if not (pid and name and team):
+        raise ValueError(f"{where}: player_id, name and team are all needed")
+    if team not in teams:
+        raise ValueError(f"{where}: unknown team {team!r}")
+    return CertainPick(pid, name, team)
+
+
+def missing_certain_picks(
+    team: str, inputs: SquadInputs, picks: Iterable[CertainPick]
+) -> tuple[str, ...]:
+    """Names of the team's certain picks who aren't candidates (no ODI in the role window)."""
+    candidates = {pid for pid, role in inputs.roles.items() if role.team == team}
+    return tuple(p.name for p in picks if p.team == team and p.player_id not in candidates)
 
 
 def load_announced(path: Path) -> tuple[AnnouncedPlayer, ...]:

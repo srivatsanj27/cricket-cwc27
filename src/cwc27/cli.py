@@ -33,6 +33,8 @@ from cwc27.players.squad_predict import (
     announced_ids,
     fallback_squad,
     load_announced,
+    load_certain_picks,
+    missing_certain_picks,
     predict_squad,
     squad_hits,
     squad_inputs,
@@ -99,24 +101,32 @@ def _squads(args: argparse.Namespace) -> int:
             MatchStore(config.database_path()), as_of, load_overrides(), load_known_styles(files)
         )
         announced = load_announced(files[-1]) if files else ()
+        picks = load_certain_picks(config.WC2027_TEAMS)
     except (ValueError, OSError, duckdb.Error) as exc:
         print(f"Could not predict squads: {exc}", file=sys.stderr)
         return 1
+    certain = frozenset(p.player_id for p in picks)
     print(f"Predicted squads as of {as_of}")
     for team in args.team or config.WC2027_TEAMS:
-        squad = predict_squad(team, inputs, SquadRules())
+        squad = predict_squad(team, inputs, SquadRules(), certain)
         print()
-        print(_format_squad(team, squad) if squad else _format_fallback(team, announced, files))
+        if not squad:
+            print(_format_fallback(team, announced, files))
+            continue
+        print(_format_squad(team, squad, certain))
+        for name in missing_certain_picks(team, inputs, picks):
+            print(f"  ! certain pick {name} has no ODI in the last two years, so is left out")
     return 0
 
 
-def _format_squad(team: str, squad: Sequence[Candidate]) -> str:
+def _format_squad(team: str, squad: Sequence[Candidate], certain: frozenset[str]) -> str:
     lines = [f"{team} ({len(squad)})"]
     for role in (Role.KEEPER, Role.BATTER, Role.ALL_ROUNDER, Role.BOWLER):
         for c in (c for c in squad if c.role is role):
             style = f", {c.style}" if c.style else ""
+            mark = ", certain pick" if c.player_id in certain else ""
             lines.append(
-                f"  {c.name:<26}{role}{style:<7}  in {c.selection_share:.0%} of recent XIs"
+                f"  {c.name:<26}{role}{style:<7}  in {c.selection_share:.0%} of recent XIs{mark}"
             )
     return "\n".join(lines)
 

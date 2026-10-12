@@ -102,3 +102,25 @@ def test_selection_shares_are_xi_appearances_over_team_matches(tmp_path):
     alpha = {pid: s for (team, pid), s in shares.items() if team == "Alphaland"}
     assert len(alpha) == 11
     assert all(s == pytest.approx(1.0) for s in alpha.values())
+
+
+def test_certain_picks_go_in_first_whatever_their_score():
+    pool = [cand(f"p{i}", share=i / 10) for i in range(5)]
+    rules = SquadRules(size=2, keepers=0, spinners=0, pacers=0, bowling_options=0)
+
+    ids = {c.player_id for c in pick_squad(pool, rules, certain={"p0"})}
+
+    assert ids == {"p0", "p4"}
+
+
+def test_a_certain_pick_counts_towards_the_balance_rules():
+    pool = [
+        cand("rested", Role.BOWLER, "pace", share=0.0),
+        cand("fringe", Role.BOWLER, "pace", share=0.3),
+        cand("bat", share=0.9),
+    ]
+    rules = SquadRules(size=2, keepers=0, spinners=0, pacers=1, bowling_options=1)
+
+    ids = {c.player_id for c in pick_squad(pool, rules, certain={"rested"})}
+
+    assert ids == {"rested", "bat"}

@@ -3,10 +3,11 @@
 A player's score mixes how often selectors have picked them lately (their share of the
 team's recent XIs) with how good they are (their rating for their role). Balance rules
 (keepers, spinners, pacers, bowling options) are met first, by score, then the rest of
-the squad is filled by score.
+the squad is filled by score. Certain picks (stars who play whenever fit) go in before all
+of that, and count towards the balance rules.
 """
 
-from collections.abc import Callable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date
 
@@ -55,7 +56,9 @@ def squad_score(c: Candidate, rules: SquadRules) -> float:
     return rules.selection_weight * c.selection_share + rules.skill_weight * skill(c, rules)
 
 
-def pick_squad(candidates: Iterable[Candidate], rules: SquadRules) -> tuple[Candidate, ...]:
+def pick_squad(
+    candidates: Iterable[Candidate], rules: SquadRules, certain: Collection[str] = frozenset()
+) -> tuple[Candidate, ...]:
     """The squad, best score first. Balance rules are met as far as the pool allows."""
     ranked = sorted(candidates, key=lambda c: -squad_score(c, rules))
     requirements: Sequence[tuple[Callable[[Candidate], bool], int]] = (
@@ -65,7 +68,7 @@ def pick_squad(candidates: Iterable[Candidate], rules: SquadRules) -> tuple[Cand
         (lambda c: c.role in BOWLING_ROLES, rules.bowling_options),
         (lambda c: True, rules.size),
     )
-    chosen: list[Candidate] = []
+    chosen = [c for c in ranked if c.player_id in certain][: rules.size]
     for wanted, count in requirements:
         have = sum(1 for c in chosen if wanted(c))
         for c in ranked:

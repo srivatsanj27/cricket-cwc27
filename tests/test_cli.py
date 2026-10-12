@@ -325,6 +325,26 @@ def test_squads_predicts_from_xis_and_falls_back_to_the_last_announced_squad(
     assert "last announced squad (2025 champions trophy)" in out and "Rashid Khan" in out
 
 
+def test_squads_marks_certain_picks_and_warns_about_missing_ones(
+    tmp_path, monkeypatch, cricsheet_zip, capsys
+):
+    _squad_data(tmp_path, monkeypatch, cricsheet_zip)
+    certain = tmp_path / "certain.csv"
+    certain.write_text(
+        "player_id,name,team\nid000000,A Player1,Alphaland\ngone,Long Gone,Alphaland\n"
+    )
+    monkeypatch.setattr("cwc27.players.squad_predict.CERTAIN_PICKS_CSV", certain)
+    monkeypatch.setattr("cwc27.config.WC2027_TEAMS", ("Alphaland",))
+    capsys.readouterr()
+
+    exit_code = main(["squads", "--team", "Alphaland", "--as-of", "2026-06-01"])
+
+    out = capsys.readouterr().out
+    assert exit_code == 0
+    assert "certain pick" in out
+    assert "Long Gone" in out and "no ODI in the last two years" in out
+
+
 def test_squads_needs_a_database(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
 
