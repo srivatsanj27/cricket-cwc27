@@ -6,8 +6,10 @@ from cwc27.ingest.cricsheet import parse_match
 from cwc27.players.balls import (
     BowledBall,
     FacedBall,
+    PhaseAverage,
     bowled_averages,
     faced_averages,
+    faced_opponent_averages,
     load_bowled,
     load_faced,
 )
@@ -138,3 +140,24 @@ def test_phase_averages_are_means_per_ball():
 def test_averages_need_at_least_one_ball():
     with pytest.raises(ValueError):
         faced_averages([])
+
+
+def test_each_ball_records_the_opponent(store):
+    faced = load_faced(store, since=date(2024, 1, 1))
+    bowled = load_bowled(store, since=date(2024, 1, 1))
+
+    assert {f.opponent for f in faced} == {"Betaland"}  # Alphaland batted against Betaland
+    assert {b.opponent for b in bowled} == {"Alphaland"}
+
+
+def test_opponent_averages_are_split_by_opponent_and_phase():
+    faced = [
+        FacedBall("m", date(2024, 1, 1), "middle", "p", "P", 4, False, opponent="Weak"),
+        FacedBall("m", date(2024, 1, 1), "middle", "p", "P", 2, False, opponent="Weak"),
+        FacedBall("m", date(2024, 1, 1), "middle", "p", "P", 0, True, opponent="Strong"),
+    ]
+
+    averages = faced_opponent_averages(faced)
+
+    assert averages[("Weak", "middle")] == PhaseAverage(3.0, 0.0)
+    assert averages[("Strong", "middle")] == PhaseAverage(0.0, 1.0)
