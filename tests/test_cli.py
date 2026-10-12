@@ -290,3 +290,51 @@ def test_export_web_fails_cleanly_without_data(tmp_path, monkeypatch, capsys):
 
     assert exit_code == 1
     assert "cwc27 ingest" in capsys.readouterr().err
+
+
+SQUAD_HEADER = (
+    "tournament,team,wiki_name,player_id,cricsheet_name,keeper,role,bowling_style,withdrawn\n"
+)
+
+
+def _squad_data(tmp_path, monkeypatch, cricsheet_zip):
+    data = tmp_path / "data"
+    monkeypatch.setenv("CWC27_DATA_DIR", str(data))
+    zip_path = cricsheet_zip({"1": make_cricsheet_match(date="2026-01-01")})
+    main(["ingest", "--zip", str(zip_path)])
+    (data / "squads").mkdir()
+    (data / "squads" / "2025_champions_trophy.csv").write_text(
+        SQUAD_HEADER + "ct,Afghanistan,Rashid Khan,,,False,Bowler,spin,False\n"
+    )
+    return data
+
+
+def test_squads_predicts_from_xis_and_falls_back_to_the_last_announced_squad(
+    tmp_path, monkeypatch, cricsheet_zip, capsys
+):
+    _squad_data(tmp_path, monkeypatch, cricsheet_zip)
+    capsys.readouterr()
+
+    exit_code = main(
+        ["squads", "--team", "Alphaland", "--team", "Afghanistan", "--as-of", "2026-06-01"]
+    )
+
+    out = capsys.readouterr().out
+    assert exit_code == 0
+    assert "Alphaland (11)" in out and "A Player1" in out
+    assert "last announced squad (2025 champions trophy)" in out and "Rashid Khan" in out
+
+
+def test_squads_needs_a_database(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+
+    assert main(["squads"]) == 1
+    assert "cwc27 ingest" in capsys.readouterr().err
+
+
+def test_squad_backtest_reports_missing_squad_files(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    _squad_data(tmp_path, monkeypatch, cricsheet_zip)
+    capsys.readouterr()
+
+    assert main(["squad-backtest"]) == 1
+    assert "2023_world_cup.csv" in capsys.readouterr().err

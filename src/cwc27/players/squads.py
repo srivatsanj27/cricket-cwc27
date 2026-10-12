@@ -257,6 +257,6 @@ def load_known_styles(paths: Iterable[Path]) -> Mapping[str, str]:
     for path in paths:
         with path.open(newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
-                if row["bowling_style"]:
+                if row["bowling_style"] and row["player_id"]:
                     styles[row["player_id"]] = row["bowling_style"]
     return styles

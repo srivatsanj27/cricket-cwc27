@@ -6,7 +6,7 @@ import math
 import sys
 import urllib.error
 import zipfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from datetime import UTC, date, datetime
 from pathlib import Path
 
@@ -25,6 +25,19 @@ from cwc27.fixtures import Fixture, load_fixtures
 from cwc27.ingest.cricsheet import ParseError, download_odi_zip, parse_zip
 from cwc27.ingest.manual import append_result, load_manual_results, merge_sources
 from cwc27.models import Match
+from cwc27.players.picker import Candidate, SquadRules
+from cwc27.players.roles import Role, load_overrides
+from cwc27.players.squad_predict import (
+    BACKTEST_CASES,
+    AnnouncedPlayer,
+    announced_ids,
+    fallback_squad,
+    load_announced,
+    predict_squad,
+    squad_hits,
+    squad_inputs,
+)
+from cwc27.players.squads import load_known_styles
 from cwc27.ratings.elo import EloConfig
 from cwc27.ratings.model import EloModel
 from cwc27.store import MatchStore
@@ -56,7 +69,91 @@ def _build_parser() -> argparse.ArgumentParser:
     _add_result_command(commands)
     _add_update_command(commands)
     _add_export_web_command(commands)
+    _add_squad_commands(commands)
     return parser
+
+
+def _add_squad_commands(commands: argparse._SubParsersAction) -> None:
+    squads = commands.add_parser("squads", help="predict each team's World Cup squad of 15")
+    squads.add_argument(
+        "--team", action="append", help="team to show; repeat for several (default: qualifiers)"
+    )
+    squads.add_argument(
+        "--as-of", type=date.fromisoformat, default=None, help="predict as of YYYY-MM-DD"
+    )
+    squads.set_defaults(handler=_squads)
+    backtest = commands.add_parser(
+        "squad-backtest", help="score the squad picker against squads announced in the past"
+    )
+    backtest.set_defaults(handler=_squad_backtest)
+
+
+def _squads(args: argparse.Namespace) -> int:
+    if not config.database_path().exists():
+        print("No database yet; run `cwc27 ingest` first.", file=sys.stderr)
+        return 1
+    files = sorted(config.squads_dir().glob("*.csv"))
+    as_of = args.as_of or date.today()
+    try:
+        inputs = squad_inputs(
+            MatchStore(config.database_path()), as_of, load_overrides(), load_known_styles(files)
+        )
+        announced = load_announced(files[-1]) if files else ()
+    except (ValueError, OSError, duckdb.Error) as exc:
+        print(f"Could not predict squads: {exc}", file=sys.stderr)
+        return 1
+    print(f"Predicted squads as of {as_of}")
+    for team in args.team or config.WC2027_TEAMS:
+        squad = predict_squad(team, inputs, SquadRules())
+        print()
+        print(_format_squad(team, squad) if squad else _format_fallback(team, announced, files))
+    return 0
+
+
+def _format_squad(team: str, squad: Sequence[Candidate]) -> str:
+    lines = [f"{team} ({len(squad)})"]
+    for role in (Role.KEEPER, Role.BATTER, Role.ALL_ROUNDER, Role.BOWLER):
+        for c in (c for c in squad if c.role is role):
+            style = f", {c.style}" if c.style else ""
+            lines.append(
+                f"  {c.name:<26}{role}{style:<7}  in {c.selection_share:.0%} of recent XIs"
+            )
+    return "\n".join(lines)
+
+
+def _format_fallback(team: str, announced: Sequence[AnnouncedPlayer], files: list[Path]) -> str:
+    players = fallback_squad(team, announced)
+    if not players:
+        return f"{team}: no recent XIs and no announced squad to fall back on"
+    source = files[-1].stem.replace("_", " ")
+    lines = [
+        f"{team} ({len(players)}): no XI data, so this is their last announced squad ({source})"
+    ]
+    lines += [f"  {p.name:<26}{p.role or ''}" for p in players]
+    return "\n".join(lines)
+
+
+def _squad_backtest(args: argparse.Namespace) -> int:
+    if not config.database_path().exists():
+        print("No database yet; run `cwc27 ingest` first.", file=sys.stderr)
+        return 1
+    store = MatchStore(config.database_path())
+    for case in BACKTEST_CASES:
+        path = config.squads_dir() / case.squads
+        if not path.exists():
+            print(f"Missing {path}; can't score {case.name}.", file=sys.stderr)
+            return 1
+        known = load_known_styles([config.squads_dir() / s for s in case.style_sources])
+        inputs = squad_inputs(store, case.as_of, load_overrides(), known)
+        truth = announced_ids(load_announced(path))
+        hits = {
+            t: squad_hits(predict_squad(t, inputs, SquadRules()), ids) for t, ids in truth.items()
+        }
+        average = sum(hits.values()) / len(hits)
+        detail = ", ".join(f"{t} {n}" for t, n in sorted(hits.items()))
+        print(f"{case.name} (as of {case.as_of}): {average:.2f} of 15 correct on average")
+        print(f"  {detail}")
+    return 0
 
 
 def _add_ingest_command(commands: argparse._SubParsersAction) -> None:

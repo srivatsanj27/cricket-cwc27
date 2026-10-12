@@ -63,6 +63,22 @@ tournament,team,wiki_name,player_id,cricsheet_name,keeper,role,bowling_style,wit
 2025_champions_trophy,Pakistan,Tayyab Tahir,431f8af4,Tayyab Tahir,False,,spin,False
 2025_champions_trophy,Pakistan,Imam-ul-Haq,40c041ea,Imam-ul-Haq,False,,spin,False
 2025_champions_trophy,Pakistan,Fakhar Zaman,1777c020,Fakhar Zaman,False,,spin,True
+2025_champions_trophy,Afghanistan,Hashmatullah Shahidi,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Fareed Ahmad,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Noor Ahmad,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Ikram Alikhil,,,True,,,False
+2025_champions_trophy,Afghanistan,Sediqullah Atal,,,False,,,False
+2025_champions_trophy,Afghanistan,Fazalhaq Farooqi,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Rahmanullah Gurbaz,,,True,,,False
+2025_champions_trophy,Afghanistan,Rashid Khan,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Nangialai Kharoti,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Mohammad Nabi,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Gulbadin Naib,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Azmatullah Omarzai,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Rahmat Shah,,,False,,spin,False
+2025_champions_trophy,Afghanistan,Ibrahim Zadran,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Naveed Zadran,,,False,,pace,False
+2025_champions_trophy,Afghanistan,Allah Mohammad Ghazanfar,,,False,,spin,True
 2025_champions_trophy,Australia,Steve Smith,30a45b23,SPD Smith,False,,spin,False
 2025_champions_trophy,Australia,Sean Abbott,1a2676c5,SA Abbott,False,,pace,False
 2025_champions_trophy,Australia,Alex Carey,69d03465,AT Carey,True,,,False

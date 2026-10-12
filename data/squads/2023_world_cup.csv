@@ -1,4 +1,19 @@
 tournament,team,wiki_name,player_id,cricsheet_name,keeper,role,bowling_style,withdrawn
+2023_world_cup,Afghanistan,Hashmatullah Shahidi,,,False,Batsman,spin,False
+2023_world_cup,Afghanistan,Noor Ahmad,,,False,Bowler,spin,False
+2023_world_cup,Afghanistan,Ikram Alikhil,,,False,Wicket-keeper,,False
+2023_world_cup,Afghanistan,Fazalhaq Farooqi,,,False,Bowler,pace,False
+2023_world_cup,Afghanistan,Rahmanullah Gurbaz,,,True,Wicket-keeper,,False
+2023_world_cup,Afghanistan,Riaz Hassan,,,False,Batsman,,False
+2023_world_cup,Afghanistan,Rashid Khan,,,False,All-rounder,spin,False
+2023_world_cup,Afghanistan,Mohammad Nabi,,,False,All-rounder,spin,False
+2023_world_cup,Afghanistan,Azmatullah Omarzai,,,False,All-rounder,pace,False
+2023_world_cup,Afghanistan,Abdul Rahman,,,False,Bowler,pace,False
+2023_world_cup,Afghanistan,Rahmat Shah,,,False,Batsman,spin,False
+2023_world_cup,Afghanistan,Naveen-ul-Haq,,,False,Bowler,pace,False
+2023_world_cup,Afghanistan,Mujeeb Ur Rahman,,,False,Bowler,spin,False
+2023_world_cup,Afghanistan,Ibrahim Zadran,,,False,Batsman,pace,False
+2023_world_cup,Afghanistan,Najibullah Zadran,,,False,Batsman,spin,False
 2023_world_cup,Australia,Pat Cummins,ded9240e,PJ Cummins,False,Bowler,pace,False
 2023_world_cup,Australia,Sean Abbott,1a2676c5,SA Abbott,False,Bowler,pace,False
 2023_world_cup,Australia,Alex Carey,69d03465,AT Carey,True,Wicket-keeper,,False

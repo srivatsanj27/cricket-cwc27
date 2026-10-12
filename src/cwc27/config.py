@@ -22,6 +22,26 @@ def manual_results_dir() -> Path:
     return data_dir() / "manual"
 
 
+# Qualified automatically for the 2027 World Cup (ICC ranking cutoff 30 Sep 2026, plus hosts).
+WC2027_TEAMS = (
+    "South Africa",
+    "Zimbabwe",
+    "Australia",
+    "India",
+    "New Zealand",
+    "Pakistan",
+    "Sri Lanka",
+    "England",
+    "Bangladesh",
+    "Afghanistan",
+)
+
+
+def squads_dir() -> Path:
+    """Announced squads from past tournaments, matched to player ids."""
+    return data_dir() / "squads"
+
+
 def recent_results_path() -> Path:
     """Where `cwc27 result` records matches Cricsheet hasn't published yet."""
     return manual_results_dir() / "recent.csv"
