@@ -6,9 +6,10 @@ import math
 import sys
 import urllib.error
 import zipfile
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, date, datetime
 from pathlib import Path
+from types import MappingProxyType
 
 import duckdb
 
@@ -40,8 +41,9 @@ from cwc27.players.squad_predict import (
     squad_inputs,
 )
 from cwc27.players.squads import load_known_styles
-from cwc27.ratings.elo import EloConfig
+from cwc27.ratings.elo import EloConfig, run_elo
 from cwc27.ratings.model import EloModel
+from cwc27.simulate.tournament import TeamOdds, host_predictor, load_format, simulate_world_cup
 from cwc27.store import MatchStore
 from cwc27.teams import normalise_team
 from cwc27.tracking.display import format_update
@@ -55,6 +57,7 @@ DEFAULT_ELO = EloConfig()
 DEFAULT_K_VALUES = (10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0)
 DEFAULT_HOME_VALUES = (0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0)
 DEFAULT_WEB_EXPORT = Path("web/data/ratings.json")
+DEFAULT_WORLD_CUP_SIMS = 10_000
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -72,6 +75,7 @@ def _build_parser() -> argparse.ArgumentParser:
     _add_update_command(commands)
     _add_export_web_command(commands)
     _add_squad_commands(commands)
+    _add_worldcup_command(commands)
     return parser
 
 
@@ -164,6 +168,52 @@ def _squad_backtest(args: argparse.Namespace) -> int:
         print(f"{case.name} (as of {case.as_of}): {average:.2f} of 15 correct on average")
         print(f"  {detail}")
     return 0
+
+
+def _add_worldcup_command(commands: argparse._SubParsersAction) -> None:
+    worldcup = commands.add_parser(
+        "worldcup", help="simulate the 2027 World Cup, Qualifier included, from current Elo"
+    )
+    worldcup.add_argument("--sims", type=_positive_int, default=DEFAULT_WORLD_CUP_SIMS)
+    worldcup.add_argument("--seed", type=int, help="fix the random draws, for repeatable odds")
+    worldcup.set_defaults(handler=_worldcup)
+
+
+def _worldcup(args: argparse.Namespace) -> int:
+    matches = _load_matches_or_report(config.RATINGS_START)
+    if matches is None:
+        return 1
+    try:
+        fmt = load_format()
+        lookup = load_city_countries()
+    except (ValueError, OSError) as exc:
+        print(f"Could not load the World Cup format: {exc}", file=sys.stderr)
+        return 1
+    ratings = run_elo(matches, DEFAULT_ELO, lambda m: home_team(m, lookup))
+    model = EloModel(DEFAULT_ELO, MappingProxyType(ratings))
+    play = host_predictor(model.predict, fmt.hosts)
+    play_qualifier = host_predictor(model.predict, fmt.qualifier_hosts)
+    odds = simulate_world_cup(fmt, play, args.sims, args.seed, play_qualifier)
+    print(f"2027 World Cup odds from {args.sims:,} simulations (Elo through {matches[-1].date})")
+    print(_format_worldcup(odds, ratings))
+    unrated = sorted(team for team in odds if team not in ratings)
+    if unrated:
+        print(f"No ODIs for {', '.join(unrated)}: rated as new teams.")
+    return 0
+
+
+def _format_worldcup(odds: Mapping[str, TeamOdds], ratings: Mapping[str, float]) -> str:
+    header = (
+        f"{'Team':<26}{'Elo':>6}{'Groups':>8}{'Super 7':>9}{'Semis':>7}{'Final':>7}{'Champion':>10}"
+    )
+    rows = [header]
+    for team, o in sorted(odds.items(), key=lambda item: (-item[1].champion, -item[1].super7)):
+        elo = f"{ratings[team]:.0f}" if team in ratings else "-"
+        rows.append(
+            f"{team:<26}{elo:>6}{o.group_stage:>8.0%}{o.super7:>9.0%}{o.semi_final:>7.0%}"
+            f"{o.final:>7.0%}{o.champion:>10.1%}"
+        )
+    return "\n".join(rows)
 
 
 def _add_ingest_command(commands: argparse._SubParsersAction) -> None:

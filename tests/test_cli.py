@@ -358,3 +358,37 @@ def test_squad_backtest_reports_missing_squad_files(tmp_path, monkeypatch, crics
 
     assert main(["squad-backtest"]) == 1
     assert "2023_world_cup.csv" in capsys.readouterr().err
+
+
+def test_worldcup_prints_title_odds_and_flags_unrated_teams(
+    tmp_path, monkeypatch, cricsheet_zip, capsys
+):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+    main(["ingest", "--zip", str(cricsheet_zip({"1": make_cricsheet_match(date="2026-01-01")}))])
+    fmt = tmp_path / "format.toml"
+    fmt.write_text(
+        'hosts = ["Alphaland"]\n[groups]\n'
+        'A = ["Alphaland", "C1", "C2", "C3", "C4", "Qualifier winner"]\n'
+        'B = ["Betaland", "D1", "D2", "D3", "D4", "Super Series winner"]\n'
+        '[qualifier]\nteams = ["Q1", "Q2", "Q3", "Q4"]\n'
+    )
+    monkeypatch.setattr("cwc27.simulate.tournament.FORMAT_TOML", fmt)
+    capsys.readouterr()
+
+    exit_code = main(["worldcup", "--sims", "200", "--seed", "1"])
+
+    out = capsys.readouterr().out
+    assert exit_code == 0
+    assert "Champion" in out and "Alphaland" in out
+    assert "No ODIs for C1" in out
+
+
+def test_worldcup_reports_a_bad_format(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
+    main(["ingest", "--zip", str(cricsheet_zip({"1": make_cricsheet_match(date="2026-01-01")}))])
+    fmt = tmp_path / "format.toml"
+    fmt.write_text("hosts = []\n")
+    monkeypatch.setattr("cwc27.simulate.tournament.FORMAT_TOML", fmt)
+
+    assert main(["worldcup", "--sims", "10"]) == 1
+    assert "format.toml" in capsys.readouterr().err

@@ -1,0 +1,33 @@
+# 2027 Men's Cricket World Cup: South Africa, Zimbabwe and Namibia, 2 Oct to 21 Nov 2027.
+# Format approved by the ICC in July 2026 (see cwc27.simulate.tournament for the stages).
+
+# From the Super Series (Windhoek) on, hosts get home advantage in every match, except
+# against another host.
+hosts = ["South Africa", "Zimbabwe", "Namibia"]
+
+# Groups as drawn. Direct qualifiers: hosts SA and Zimbabwe, plus the ODI top eight on
+# 30 Sep 2026. "Qualifier winner" and "Super Series winner" fill the last two slots.
+# Assumption: the Qualifier winner joins Group A, the Super Series winner Group B.
+[groups]
+A = ["India", "Australia", "Pakistan", "Afghanistan", "Zimbabwe", "Qualifier winner"]
+B = ["New Zealand", "South Africa", "Sri Lanka", "England", "Bangladesh", "Super Series winner"]
+
+# Qualifier, 26 Feb to 21 Mar 2027 (South Africa and Namibia), 10 teams.
+# Confirmed (Oct 2026): West Indies, Ireland, USA, Scotland, Netherlands.
+# Assumed until League 2 and the Qualifier Play-off finish: Oman, Namibia, Nepal,
+# United Arab Emirates, Canada.
+[qualifier]
+# Split between South Africa and Namibia with venues per match unknown, so neutral.
+hosts = []
+teams = [
+    "West Indies",
+    "Ireland",
+    "United States of America",
+    "Scotland",
+    "Netherlands",
+    "Oman",
+    "Namibia",
+    "Nepal",
+    "United Arab Emirates",
+    "Canada",
+]

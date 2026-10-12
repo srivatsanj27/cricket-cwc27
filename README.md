@@ -76,6 +76,9 @@ cwc27 ingest --download
 | `cwc27 export-web` | Write the latest ratings to `web/data/ratings.json` for the website |
 | `cwc27 backtest [--k K] [--home-advantage H]` | Score Elo and the baselines on past ODIs |
 | `cwc27 tune` | Grid-search Elo settings and confirm them on recent matches |
+| `cwc27 squads [--team TEAM] [--as-of DATE]` | Predict each World Cup team's squad of 15. Certain picks are kept in `config/certain_picks.csv` |
+| `cwc27 squad-backtest` | Score the squad picker against the 2023 World Cup and 2025 Champions Trophy squads |
+| `cwc27 worldcup [--sims N] [--seed S]` | Simulate the 2027 World Cup, Qualifier included, from current Elo. Format in `config/wc2027_format.toml` |
 
 ### After each match
 
