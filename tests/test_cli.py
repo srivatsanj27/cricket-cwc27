@@ -367,7 +367,7 @@ def test_worldcup_prints_title_odds_and_flags_unrated_teams(
     main(["ingest", "--zip", str(cricsheet_zip({"1": make_cricsheet_match(date="2026-01-01")}))])
     fmt = tmp_path / "format.toml"
     fmt.write_text(
-        'hosts = ["Alphaland"]\n[groups]\n'
+        'start = 2027-10-02\nhosts = ["Alphaland"]\n[groups]\n'
         'A = ["Alphaland", "C1", "C2", "C3", "C4", "Qualifier winner"]\n'
         'B = ["Betaland", "D1", "D2", "D3", "D4", "Super Series winner"]\n'
         '[qualifier]\nteams = ["Q1", "Q2", "Q3", "Q4"]\n'
@@ -381,6 +381,16 @@ def test_worldcup_prints_title_odds_and_flags_unrated_teams(
     assert exit_code == 0
     assert "Champion" in out and "Alphaland" in out
     assert "No ODIs for C1" in out
+    assert "blurred by ±" in out
+
+
+def test_worldcup_rating_sd_can_be_set(tmp_path, monkeypatch, cricsheet_zip, capsys):
+    test_worldcup_prints_title_odds_and_flags_unrated_teams(
+        tmp_path, monkeypatch, cricsheet_zip, capsys
+    )
+
+    assert main(["worldcup", "--sims", "50", "--rating-sd", "0"]) == 0
+    assert "blurred by ±0 Elo" in capsys.readouterr().out
 
 
 def test_worldcup_reports_a_bad_format(tmp_path, monkeypatch, cricsheet_zip, capsys):

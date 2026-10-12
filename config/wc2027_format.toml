@@ -1,6 +1,9 @@
 # 2027 Men's Cricket World Cup: South Africa, Zimbabwe and Namibia, 2 Oct to 21 Nov 2027.
 # Format approved by the ICC in July 2026 (see cwc27.simulate.tournament for the stages).
 
+# Super Series opens the tournament proper; the Qualifier comes earlier (see below).
+start = 2027-10-02
+
 # From the Super Series (Windhoek) on, hosts get home advantage in every match, except
 # against another host.
 hosts = ["South Africa", "Zimbabwe", "Namibia"]

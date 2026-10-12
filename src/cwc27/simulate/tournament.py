@@ -11,6 +11,9 @@ Format (ICC, July 2026):
 
 Tables are ranked on points, then wins, then net run rate. With no washouts simulated,
 wins follow from points, and a random draw stands in for net run rate.
+
+Ratings for a tournament months away are uncertain, so `elo_predictors` blurs each team's
+rating with one random draw per simulated tournament (see cwc27.evaluation.horizon).
 """
 
 import random
@@ -18,11 +21,14 @@ import tomllib
 from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import date
 from functools import cache
 from itertools import combinations
 from pathlib import Path
 from types import MappingProxyType
 
+from cwc27.ratings.elo import initial_rating
+from cwc27.ratings.model import EloModel
 from cwc27.simulate.multiseries import WIN_POINTS, rank_teams
 
 QUALIFIER_WINNER = "Qualifier winner"  # group slot filled by the Qualifier winner
@@ -34,10 +40,13 @@ FORMAT_TOML = Path(__file__).resolve().parents[3] / "config" / "wc2027_format.to
 
 STAGES = ("group_stage", "super7", "semi_final", "final", "champion")
 Predict = Callable[[str, str], float]  # chance that the first team beats the second
+# One simulated tournament's predictors: (from the Super Series on, for the Qualifier).
+Predictors = Callable[[random.Random], tuple[Predict, Predict]]
 
 
 @dataclass(frozen=True, slots=True)
 class WorldCupFormat:
+    start: date  # first day of the tournament proper
     groups: tuple[tuple[str, ...], ...]  # group A, group B, with the two slots to fill
     qualifier: tuple[str, ...]
     hosts: tuple[str, ...]  # home advantage from the Super Series on
@@ -63,6 +72,7 @@ def load_format(path: Path | None = None) -> WorldCupFormat:
     try:
         qualifier = raw["qualifier"]
         fmt = WorldCupFormat(
+            start=_date(raw["start"]),
             groups=tuple(_names(raw["groups"][name], f"group {name}") for name in ("A", "B")),
             qualifier=_names(qualifier["teams"], "qualifier teams"),
             hosts=_names(raw["hosts"], "hosts"),
@@ -72,6 +82,12 @@ def load_format(path: Path | None = None) -> WorldCupFormat:
         raise ValueError(f"{path.name}: missing or malformed {exc}") from exc
     _validate_format(fmt, path.name)
     return fmt
+
+
+def _date(value: object) -> date:
+    if not isinstance(value, date):
+        raise ValueError("start must be a date like 2027-10-02")
+    return value
 
 
 def _names(value: object, what: str) -> tuple[str, ...]:
@@ -106,32 +122,52 @@ def host_predictor(
     return play
 
 
-def simulate_world_cup(
-    fmt: WorldCupFormat,
-    predict: Predict,
-    n_sims: int = 10_000,
-    seed: int | None = None,
-    qualifier_predict: Predict | None = None,
-) -> Mapping[str, TeamOdds]:
-    """Play the whole event `n_sims` times; each team's chance of reaching each stage.
+def fixed_predictors(predict: Predict, qualifier_predict: Predict | None = None) -> Predictors:
+    """The same predictors in every simulation (the Qualifier's default to `predict`)."""
+    pair = (cache(predict), cache(qualifier_predict or predict))
+    return lambda rng: pair
 
-    `qualifier_predict` is used for Qualifier matches (default: `predict`), since that
-    stage can have different hosts.
-    """
+
+def elo_predictors(model: EloModel, fmt: WorldCupFormat, rating_sd: float) -> Predictors:
+    """Per simulation, every rating moves by a normal draw with spread `rating_sd`."""
+    if rating_sd < 0:
+        raise ValueError(f"rating_sd must not be negative, got {rating_sd}")
+    teams = _teams(fmt)
+
+    def draw(rng: random.Random) -> tuple[Predict, Predict]:
+        ratings = {
+            t: model.ratings.get(t, initial_rating(t, model.config)) + rng.gauss(0.0, rating_sd)
+            for t in teams
+        }
+        drawn = EloModel(model.config, MappingProxyType(ratings))
+        return (
+            cache(host_predictor(drawn.predict, fmt.hosts)),
+            cache(host_predictor(drawn.predict, fmt.qualifier_hosts)),
+        )
+
+    return draw
+
+
+def simulate_world_cup(
+    fmt: WorldCupFormat, predictors: Predictors, n_sims: int = 10_000, seed: int | None = None
+) -> Mapping[str, TeamOdds]:
+    """Play the whole event `n_sims` times; each team's chance of reaching each stage."""
     if n_sims < 1:
         raise ValueError(f"n_sims must be at least 1, got {n_sims}")
     rng = random.Random(seed)
-    p = cache(predict)
-    pq = cache(qualifier_predict) if qualifier_predict else p
     reached = {stage: Counter[str]() for stage in STAGES}
     for _ in range(n_sims):
+        p, pq = predictors(rng)
         for stage, teams in _one_cup(fmt, p, pq, rng).items():
             reached[stage].update(teams)
-    slots = {QUALIFIER_WINNER, SUPER_SERIES_WINNER}
-    teams = sorted(({t for g in fmt.groups for t in g} - slots) | set(fmt.qualifier))
     return MappingProxyType(
-        {t: TeamOdds(*(reached[stage][t] / n_sims for stage in STAGES)) for t in teams}
+        {t: TeamOdds(*(reached[stage][t] / n_sims for stage in STAGES)) for t in _teams(fmt)}
     )
+
+
+def _teams(fmt: WorldCupFormat) -> list[str]:
+    slots = {QUALIFIER_WINNER, SUPER_SERIES_WINNER}
+    return sorted(({t for g in fmt.groups for t in g} - slots) | set(fmt.qualifier))
 
 
 def _one_cup(
