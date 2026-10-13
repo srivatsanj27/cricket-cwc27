@@ -33,6 +33,13 @@ cd web && npm test
 `sim.js` mirrors `cwc27.ratings.elo.win_probability` and `cwc27.simulate.series.simulate_series`;
 `state.js` handles the shareable URL (`#a=India&b=Australia&v=Mumbai|Chennai|`, empty = neutral).
 
+## Motion
+
+`motion.js` adds smooth scrolling with [Locomotive Scroll](https://github.com/locomotivemtl/locomotive-scroll)
+(built on Lenis), a drifting hero headline and one-time section reveals. It is skipped for people
+who have reduced motion turned on. The libraries are vendored in `vendor/` (see `vendor/README.md`),
+so there is still no build step.
+
 ## Design
 
 `DESIGN.md` holds the visual rules, adapted from the awesome-design-md Nike analysis with the

@@ -14,8 +14,18 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap"
     />
+    <link rel="stylesheet" href="vendor/locomotive-scroll.css" />
     <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "lenis": "./vendor/lenis.mjs",
+          "locomotive-scroll": "./vendor/locomotive-scroll.mjs"
+        }
+      }
+    </script>
     <script type="module" src="app.js"></script>
+    <script type="module" src="motion.js"></script>
   </head>
   <body>
     <header class="masthead">
@@ -24,13 +34,16 @@
     </header>
 
     <main>
-      <section class="intro">
-        <h1>Pick two teams.<br />Play the series.</h1>
+      <section class="intro" data-scroll data-scroll-css-progress data-scroll-position="start,start">
+        <h1>
+          <span class="intro-line intro-line-1">Pick two teams.</span>
+          <span class="intro-line intro-line-2">Play the series.</span>
+        </h1>
         <p>Choose a venue for every ODI. We play the series 20,000 times and count who wins.</p>
       </section>
 
       <div class="workspace">
-        <form id="builder" class="builder" novalidate>
+        <form id="builder" class="builder reveal" data-scroll novalidate>
           <div class="teams">
             <div class="field">
               <label for="team-a">Team A</label>
@@ -61,12 +74,12 @@
         </form>
 
         <p id="summary" class="visually-hidden" aria-live="polite"></p>
-        <section id="result" class="result" aria-busy="true" aria-label="Series forecast">
+        <section id="result" class="result reveal" data-scroll aria-busy="true" aria-label="Series forecast">
           <div class="skeleton-block"></div>
         </section>
       </div>
 
-      <section id="method" class="method">
+      <section id="method" class="method reveal" data-scroll>
         <h2>How it works</h2>
         <p>
           Each team has an Elo rating built from every men's ODI since 2019. A gap of 400 points

@@ -10,8 +10,10 @@ Adapted with the taste-skill rules (github.com/Leonxlnx/taste-skill).
   Dark mode inverts: canvas #111111, surface #1c1c1e, ink #f5f5f5, accent #ff5a52.
 - Shape rule: every interactive control (button, chip, select) is a full pill; every container (panel, row, bar) is square.
 - No emoji, no em-dashes, no icon fonts. Chevrons are drawn with CSS borders.
-- Motion: minimal. Short opacity fade when results change. Disabled under prefers-reduced-motion.
-- Dials: DESIGN_VARIANCE 5, MOTION_INTENSITY 3, VISUAL_DENSITY 5.
+- Motion: Locomotive Scroll smooth scrolling (motion.js). The hero lines drift apart as the hero scrolls away,
+  sections reveal once on entry, in-page links glide. Short opacity fade when results change.
+  All of it is off under prefers-reduced-motion, and content stays visible if motion.js never runs.
+- Dials: DESIGN_VARIANCE 5, MOTION_INTENSITY 6, VISUAL_DENSITY 5.
 -->
 
 ---
