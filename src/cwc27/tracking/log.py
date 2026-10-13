@@ -69,7 +69,7 @@ def refresh_predictions(
     today: date,
     now: datetime,
 ) -> tuple[LoggedPrediction, ...]:
-    """Re-predict every fixture that isn't locked yet.
+    """Re-predict every fixture that isn't locked yet; an unchanged prediction keeps its row.
 
     Locked or scored rows are never changed. Unlocked rows whose fixture is gone (postponed
     or removed) are dropped, so they can't linger unscored.
@@ -85,7 +85,7 @@ def refresh_predictions(
         if is_locked(fixture.date, today) or (existing and existing.result_type is not None):
             continue
         p, home = predict(fixture)
-        rows[fixture.key] = LoggedPrediction(
+        fresh = LoggedPrediction(
             fixture_key=fixture.key,
             date=fixture.date,
             series=fixture.series,
@@ -97,6 +97,8 @@ def refresh_predictions(
             model=model,
             predicted_at=now,
         )
+        unchanged = existing and replace(fresh, predicted_at=existing.predicted_at) == existing
+        rows[fixture.key] = existing if unchanged else fresh
     return _ordered(rows.values())
 
 

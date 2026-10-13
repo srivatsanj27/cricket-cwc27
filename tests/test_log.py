@@ -60,6 +60,17 @@ def test_refresh_replaces_a_future_prediction():
     assert second[0].predicted_at == later_now
 
 
+def test_an_unchanged_prediction_keeps_its_original_timestamp():
+    first = predicted([fx(date(2026, 10, 13))])
+    later_now = datetime(2026, 10, 11, 9, 0, tzinfo=UTC)
+
+    second = refresh_predictions(
+        first, [fx(date(2026, 10, 13))], predictor(0.6), "elo", date(2026, 10, 11), later_now
+    )
+
+    assert second == first
+
+
 @pytest.mark.parametrize("day", [date(2026, 10, 11), date(2026, 10, 12), date(2026, 10, 14)])
 def test_predictions_lock_the_day_before_the_match(day):
     log = predicted([fx(date(2026, 10, 12))])

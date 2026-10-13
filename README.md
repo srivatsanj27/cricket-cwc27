@@ -80,6 +80,13 @@ cwc27 ingest --download
 | `cwc27 squad-backtest` | Score the squad picker against the 2023 World Cup and 2025 Champions Trophy squads |
 | `cwc27 worldcup [--sims N] [--seed S]` | Simulate the 2027 World Cup, Qualifier included, from current Elo. Format in `config/wc2027_format.toml` |
 
+### Automation
+
+GitHub Actions runs the tests on every push. A daily job (00:30 UTC) also runs
+`cwc27 update --download` and `cwc27 export-web`, then commits any change to the prediction log
+or the website's ratings. Matches that Cricsheet hasn't published yet still need
+`cwc27 result`, as below.
+
 ### After each match
 
 ```bash
