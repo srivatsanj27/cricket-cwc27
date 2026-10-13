@@ -27,7 +27,8 @@ from itertools import combinations
 from pathlib import Path
 from types import MappingProxyType
 
-from cwc27.ratings.elo import initial_rating
+from cwc27.evaluation.horizon import rating_sd
+from cwc27.ratings.elo import EloConfig, initial_rating
 from cwc27.ratings.model import EloModel
 from cwc27.simulate.multiseries import WIN_POINTS, rank_teams
 
@@ -62,6 +63,14 @@ class TeamOdds:
     semi_final: float
     final: float
     champion: float
+
+
+@dataclass(frozen=True, slots=True)
+class WorldCupOutlook:
+    odds: Mapping[str, TeamOdds]
+    rating_sd: float  # Elo spread each team's rating was blurred by
+    days_ahead: int  # from the last rated match to the start
+    start: date  # first day of the tournament proper
 
 
 def load_format(path: Path | None = None) -> WorldCupFormat:
@@ -163,6 +172,23 @@ def simulate_world_cup(
     return MappingProxyType(
         {t: TeamOdds(*(reached[stage][t] / n_sims for stage in STAGES)) for t in _teams(fmt)}
     )
+
+
+def forecast_world_cup(
+    ratings: Mapping[str, float],
+    config: EloConfig,
+    fmt: WorldCupFormat,
+    ratings_through: date,
+    n_sims: int,
+    seed: int | None = None,
+    sd: float | None = None,
+) -> WorldCupOutlook:
+    """Odds from current ratings, blurred for the time left (unless `sd` is given)."""
+    days_ahead = max((fmt.start - ratings_through).days, 0)
+    spread = rating_sd(days_ahead) if sd is None else sd
+    model = EloModel(config, MappingProxyType(dict(ratings)))
+    odds = simulate_world_cup(fmt, elo_predictors(model, fmt, spread), n_sims, seed)
+    return WorldCupOutlook(odds, spread, days_ahead, fmt.start)
 
 
 def _teams(fmt: WorldCupFormat) -> list[str]:

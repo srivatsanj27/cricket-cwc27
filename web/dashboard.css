@@ -1,0 +1,538 @@
+/* Dashboard styles. Same design system as the fantasy page (DESIGN.md): ink and canvas,
+   one red accent, pill controls, square containers, Anton display over Archivo. */
+:root {
+  --canvas: #ffffff;
+  --surface: #f5f5f5;
+  --ink: #111111;
+  --charcoal: #39393b;
+  --mute: #5f5f61;
+  --hairline: #cacacb;
+  --faint: #e5e5e5;
+  --accent: #d30005;
+  --on-ink: #ffffff;
+  --font-display: "Anton", "Arial Narrow", Impact, sans-serif;
+  --font-ui: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --space-section: 48px;
+  --pill: 9999px;
+  --page-max: 1200px;
+  --gutter: 16px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #111111;
+    --surface: #1c1c1e;
+    --ink: #f5f5f5;
+    --charcoal: #cacacb;
+    --mute: #9e9ea0;
+    --hairline: #39393b;
+    --faint: #262628;
+    --accent: #ff5a52;
+    --on-ink: #111111;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --canvas: #111111;
+  --surface: #1c1c1e;
+  --ink: #f5f5f5;
+  --charcoal: #cacacb;
+  --mute: #9e9ea0;
+  --hairline: #39393b;
+  --faint: #262628;
+  --accent: #ff5a52;
+  --on-ink: #111111;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin: 0;
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, 48px);
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 16px var(--gutter);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.masthead-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.masthead-nav a {
+  text-decoration: none;
+}
+
+.masthead-nav a:hover {
+  text-decoration: underline;
+}
+
+.pill-link {
+  border: 1px solid var(--ink);
+  border-radius: var(--pill);
+  padding: 6px 16px;
+}
+
+.pill-link:hover {
+  background: var(--ink);
+  color: var(--canvas);
+  text-decoration: none !important;
+}
+
+main {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.hero {
+  display: grid;
+  gap: 24px;
+  padding: 32px 0 var(--space-section);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.hero h1 {
+  display: grid;
+  font-size: clamp(72px, 16vw, 192px);
+}
+
+.hero h1 span:last-child {
+  color: var(--accent);
+}
+
+.hero-facts {
+  display: grid;
+  gap: 8px;
+  align-content: end;
+}
+
+.fact {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.fact-value {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1;
+  margin-right: 6px;
+}
+
+.hero-note,
+.panel-note {
+  margin: 0;
+  color: var(--mute);
+  font-size: 14px;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: end;
+  }
+}
+
+.load-error {
+  margin: 24px 0 0;
+  padding: 16px;
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+}
+
+.panel {
+  padding: var(--space-section) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.panel-head {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+/* World Cup odds */
+.odds {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.odds th {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding: 0 8px 8px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.odds th:first-child,
+.odds td:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+
+.odds td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--faint);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.odds .team {
+  font-weight: 600;
+  white-space: normal;
+}
+
+.odds .stage {
+  color: var(--charcoal);
+}
+
+.odds .champion {
+  width: 40%;
+  padding-right: 0;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: minmax(72px, 1fr) 48px;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-track {
+  height: 10px;
+  background: var(--surface);
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.odds tr:first-child .bar-fill {
+  background: var(--accent);
+}
+
+.bar-value {
+  font-weight: 600;
+}
+
+.qualifier-tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mute);
+}
+
+@media (max-width: 640px) {
+  .odds .stage {
+    display: none;
+  }
+
+  .odds .champion {
+    width: 55%;
+  }
+}
+
+/* Next up */
+.fixtures,
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--faint);
+}
+
+.fixture {
+  display: grid;
+  gap: 8px;
+  padding: 14px 0;
+  background: var(--canvas);
+}
+
+.fixture-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.tag {
+  border: 1px solid var(--hairline);
+  border-radius: var(--pill);
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.tag-locked {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.split-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.split-labels span:last-child {
+  text-align: right;
+  color: var(--accent);
+}
+
+.split {
+  display: flex;
+  height: 8px;
+  background: var(--accent);
+}
+
+.split-a {
+  background: var(--ink);
+}
+
+.empty {
+  margin: 0;
+  padding: 16px;
+  background: var(--surface);
+  color: var(--charcoal);
+}
+
+/* Ratings chart */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--hairline);
+  border-radius: var(--pill);
+  background: var(--canvas);
+  color: var(--ink);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--ink);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--canvas);
+}
+
+.chip[data-slot="1"][aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.chart {
+  margin: 0;
+}
+
+.chart svg {
+  display: block;
+  width: 100%;
+  height: clamp(260px, 45vw, 420px);
+  overflow: visible;
+}
+
+.gridline {
+  stroke: var(--faint);
+  stroke-width: 1;
+}
+
+.axis-label {
+  fill: var(--mute);
+  font-size: 12px;
+  font-family: var(--font-ui);
+}
+
+.line {
+  fill: none;
+  stroke: var(--hairline);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.line-0 {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+
+.line-1 {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--charcoal);
+}
+
+.legend strong {
+  color: var(--ink);
+}
+
+/* Track record */
+.record {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--faint);
+}
+
+.stat {
+  margin: 0;
+  padding: 16px;
+  background: var(--surface);
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.result {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  padding: 12px 0;
+  background: var(--canvas);
+}
+
+.result-call {
+  font-size: 14px;
+  color: var(--charcoal);
+}
+
+.result-hit {
+  font-weight: 600;
+}
+
+.result-miss {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Method and footer */
+.method {
+  padding: var(--space-section) 0;
+  display: grid;
+  gap: 16px;
+  max-width: 720px;
+}
+
+.method p {
+  margin: 0;
+  color: var(--charcoal);
+}
+
+.footer {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 24px var(--gutter) 48px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    animation: rise 0.5s ease-out both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+}

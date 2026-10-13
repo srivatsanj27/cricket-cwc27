@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Road to 2027</title>
+    <meta
+      name="description"
+      content="Elo ratings, match predictions, the model's track record and 2027 Cricket World Cup odds, updated every day."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="dashboard.css" />
+    <script type="module" src="dashboard.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="wordmark" href="dashboard.html">Road to 2027</a>
+      <nav class="masthead-nav" aria-label="Site">
+        <a href="#odds">Odds</a>
+        <a href="#next">Next up</a>
+        <a href="#ratings">Ratings</a>
+        <a href="#record">Track record</a>
+        <a class="pill-link" href="./">Fantasy series</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">
+          <span>Road to</span>
+          <span>2027</span>
+        </h1>
+        <div class="hero-facts">
+          <p class="fact"><span class="fact-value" id="days-left">-</span> days to the World Cup</p>
+          <p class="fact"><span class="fact-value" id="favourite">-</span> favourites</p>
+          <p class="hero-note" id="updated">Loading the latest ratings.</p>
+        </div>
+      </section>
+
+      <p class="load-error" id="load-error" role="alert" hidden>
+        The dashboard data could not be loaded. Run <code>cwc27 export-web</code> and serve this folder
+        over HTTP.
+      </p>
+
+      <section class="panel" id="odds" aria-labelledby="odds-title">
+        <div class="panel-head">
+          <h2 id="odds-title">World Cup odds</h2>
+          <p class="panel-note" id="odds-note"></p>
+        </div>
+        <table class="odds">
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col" class="stage">Groups</th>
+              <th scope="col" class="stage">Super 7</th>
+              <th scope="col" class="stage">Semis</th>
+              <th scope="col" class="stage">Final</th>
+              <th scope="col" class="champion-head">Champion</th>
+            </tr>
+          </thead>
+          <tbody id="odds-body"></tbody>
+        </table>
+      </section>
+
+      <section class="panel" id="next" aria-labelledby="next-title">
+        <div class="panel-head">
+          <h2 id="next-title">Next up</h2>
+          <p class="panel-note">Each prediction locks the day before the match, then is scored on the result.</p>
+        </div>
+        <ol class="fixtures" id="fixtures"></ol>
+      </section>
+
+      <section class="panel" id="ratings" aria-labelledby="ratings-title">
+        <div class="panel-head">
+          <h2 id="ratings-title">Elo since the last World Cup</h2>
+          <p class="panel-note">Pick up to two teams to follow. The rest stay in the background.</p>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Teams to highlight"></div>
+        <figure class="chart">
+          <svg id="ratings-chart" role="img" aria-labelledby="ratings-title" preserveAspectRatio="none"></svg>
+          <figcaption class="legend" id="legend"></figcaption>
+        </figure>
+      </section>
+
+      <section class="panel" id="record" aria-labelledby="record-title">
+        <div class="panel-head">
+          <h2 id="record-title">Track record</h2>
+          <p class="panel-note">
+            Brier score: 0 is perfect, 0.25 is a coin flip. Lower is better.
+          </p>
+        </div>
+        <div class="record" id="record-body"></div>
+        <ol class="results" id="results"></ol>
+      </section>
+
+      <section class="method" aria-labelledby="method-title">
+        <h2 id="method-title">How it works</h2>
+        <p>
+          Every men's ODI since 2019 updates an Elo rating for each team, with home advantage. Match
+          predictions come straight from the ratings. The World Cup is played 10,000 times in the
+          ICC's 2027 format, Qualifier included, with each team's rating blurred for the time left
+          before the tournament, because ratings drift over a year.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Data from Cricsheet, plus results entered by hand where Cricsheet has none.</p>
+    </footer>
+  </body>
+</html>

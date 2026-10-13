@@ -172,3 +172,25 @@ def test_the_real_2027_format_loads():
 
     assert [len(group) for group in fmt.groups] == [6, 6]
     assert len(fmt.qualifier) == 10
+
+
+def test_forecast_sizes_the_rating_blur_from_the_days_left():
+    from cwc27.simulate.tournament import forecast_world_cup
+
+    ratings = {t: 1500.0 for t in GROUP_A[:5] + GROUP_B[:5] + QUALIFIER}
+    outlook = forecast_world_cup(ratings, EloConfig(), FORMAT, date(2026, 10, 2), 50, seed=1)
+
+    assert outlook.days_ahead == 365
+    assert outlook.rating_sd == pytest.approx(100.0, abs=0.2)
+    assert sum(o.champion for o in outlook.odds.values()) == pytest.approx(1.0)
+
+
+def test_forecast_after_the_start_uses_no_drift_and_an_explicit_blur_wins():
+    from cwc27.simulate.tournament import forecast_world_cup
+
+    late = forecast_world_cup({}, EloConfig(), FORMAT, date(2027, 11, 1), 10, seed=1)
+    fixed = forecast_world_cup({}, EloConfig(), FORMAT, date(2026, 1, 1), 10, seed=1, sd=0.0)
+
+    assert late.days_ahead == 0
+    assert late.rating_sd == pytest.approx(60.0)
+    assert fixed.rating_sd == 0.0

@@ -31,10 +31,12 @@ jobs:
       - name: Commit any changes
         run: |
           # A new timestamp alone isn't worth a commit.
-          if ! git diff -U0 web/data/ratings.json | grep '^[+-] ' | grep -qv '"generated_at"'; then
-            git checkout -- web/data/ratings.json
-          fi
-          git add data/predictions_log.csv web/data/ratings.json
+          for file in web/data/ratings.json web/data/dashboard.json; do
+            if ! git diff -U0 "$file" | grep '^[+-] ' | grep -qv '"generated_at"'; then
+              git checkout -- "$file"
+            fi
+          done
+          git add data/predictions_log.csv web/data/ratings.json web/data/dashboard.json
           if git diff --cached --quiet; then
             echo "Nothing changed."
             exit 0

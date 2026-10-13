@@ -1,0 +1,40 @@
+name: pages
+
+# Publishes web/ (the fantasy series page and the dashboard) to GitHub Pages: on pushes that
+# change it, and after each daily update, whose own push can't trigger this workflow.
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**"]
+  workflow_run:
+    workflows: ["daily update"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4

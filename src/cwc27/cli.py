@@ -8,14 +8,13 @@ import urllib.error
 import zipfile
 from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, date, datetime
+from functools import partial
 from pathlib import Path
-from types import MappingProxyType
 
 import duckdb
 
 from cwc27 import config
 from cwc27.evaluation.baselines import CoinFlip, WinRate
-from cwc27.evaluation.horizon import rating_sd
 from cwc27.evaluation.report import compare, format_rows
 from cwc27.evaluation.tuning import (
     CONFIRM_SEGMENT,
@@ -44,13 +43,14 @@ from cwc27.players.squad_predict import (
 from cwc27.players.squads import load_known_styles
 from cwc27.ratings.elo import EloConfig, run_elo
 from cwc27.ratings.model import EloModel
-from cwc27.simulate.tournament import TeamOdds, elo_predictors, load_format, simulate_world_cup
+from cwc27.simulate.tournament import TeamOdds, forecast_world_cup, load_format
 from cwc27.store import MatchStore
 from cwc27.teams import normalise_team
 from cwc27.tracking.display import format_update
 from cwc27.tracking.log import read_log, write_log
 from cwc27.tracking.update import run_update
 from cwc27.venues import home_team, load_city_countries
+from cwc27.web_dashboard import build_dashboard, write_dashboard
 from cwc27.web_export import build_web_export, write_web_export
 
 MAX_ERRORS_SHOWN = 10
@@ -58,6 +58,8 @@ DEFAULT_ELO = EloConfig()
 DEFAULT_K_VALUES = (10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0)
 DEFAULT_HOME_VALUES = (0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0)
 DEFAULT_WEB_EXPORT = Path("web/data/ratings.json")
+DEFAULT_DASHBOARD_EXPORT = Path("web/data/dashboard.json")
+DASHBOARD_SEED = 2027  # fixed, so the odds only change when the ratings do
 DEFAULT_WORLD_CUP_SIMS = 10_000
 
 
@@ -196,14 +198,17 @@ def _worldcup(args: argparse.Namespace) -> int:
         print(f"Could not load the World Cup format: {exc}", file=sys.stderr)
         return 1
     ratings = run_elo(matches, DEFAULT_ELO, lambda m: home_team(m, lookup))
-    model = EloModel(DEFAULT_ELO, MappingProxyType(ratings))
-    days_ahead = max((fmt.start - matches[-1].date).days, 0)
-    sd = rating_sd(days_ahead) if args.rating_sd is None else args.rating_sd
-    odds = simulate_world_cup(fmt, elo_predictors(model, fmt, sd), args.sims, args.seed)
-    print(f"2027 World Cup odds from {args.sims:,} simulations (Elo through {matches[-1].date})")
-    print(f"Ratings blurred by ±{sd:.0f} Elo for a tournament {days_ahead} days away")
-    print(_format_worldcup(odds, ratings))
-    unrated = sorted(team for team in odds if team not in ratings)
+    through = matches[-1].date
+    outlook = forecast_world_cup(
+        ratings, DEFAULT_ELO, fmt, through, args.sims, args.seed, args.rating_sd
+    )
+    print(f"2027 World Cup odds from {args.sims:,} simulations (Elo through {through})")
+    print(
+        f"Ratings blurred by ±{outlook.rating_sd:.0f} Elo"
+        f" for a tournament {outlook.days_ahead} days away"
+    )
+    print(_format_worldcup(outlook.odds, ratings))
+    unrated = sorted(team for team in outlook.odds if team not in ratings)
     if unrated:
         print(f"No ODIs for {', '.join(unrated)}: rated as new teams.")
     return 0
@@ -307,6 +312,12 @@ def _add_export_web_command(commands: argparse._SubParsersAction) -> None:
     )
     export.add_argument(
         "--out", type=Path, default=DEFAULT_WEB_EXPORT, help="where to write the JSON"
+    )
+    export.add_argument(
+        "--dashboard-out",
+        type=Path,
+        default=DEFAULT_DASHBOARD_EXPORT,
+        help="where to write the dashboard JSON",
     )
     export.set_defaults(handler=_export_web)
 
@@ -557,6 +568,7 @@ def _export_web(args: argparse.Namespace) -> int:
             active_since=config.WINDOW_START,
         )
         write_web_export(args.out, payload)
+        _export_dashboard(matches, args.dashboard_out)
     except (ValueError, OSError) as exc:
         print(f"Could not export for the website: {exc}", file=sys.stderr)
         return 1
@@ -564,7 +576,32 @@ def _export_web(args: argparse.Namespace) -> int:
         f"Wrote {len(payload['teams'])} teams and {len(payload['venues'])} venues "
         f"(ratings through {payload['ratings_through']}) to {args.out}"
     )
+    print(f"Wrote the dashboard to {args.dashboard_out}")
     return 0
+
+
+def _export_dashboard(matches: Sequence[Match], path: Path) -> None:
+    """Ratings over time, the prediction log and World Cup odds, for web/dashboard.html."""
+    lookup = load_city_countries()
+    fmt = load_format()
+    home_of = partial(home_team, city_countries=lookup)
+    ratings = run_elo(matches, DEFAULT_ELO, home_of)
+    through = max(m.date for m in matches)
+    outlook = forecast_world_cup(
+        ratings, DEFAULT_ELO, fmt, through, DEFAULT_WORLD_CUP_SIMS, DASHBOARD_SEED
+    )
+    payload = build_dashboard(
+        matches,
+        read_log(config.predictions_log_path()),
+        DEFAULT_ELO,
+        home_of,
+        outlook,
+        teams=tuple(outlook.odds),
+        since=config.WINDOW_START,
+        today=date.today(),
+        generated_at=datetime.now(UTC),
+    )
+    write_dashboard(path, payload)
 
 
 def _report_errors(errors: tuple[str, ...]) -> None:

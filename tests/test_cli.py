@@ -274,19 +274,32 @@ def test_export_web_writes_ratings_json(tmp_path, monkeypatch, cricsheet_zip, ca
     main(["ingest", "--zip", str(zip_path)])
     capsys.readouterr()
     out_path = tmp_path / "site" / "ratings.json"
+    dashboard_path = tmp_path / "site" / "dashboard.json"
 
-    exit_code = main(["export-web", "--out", str(out_path)])
+    exit_code = main(["export-web", "--out", str(out_path), "--dashboard-out", str(dashboard_path)])
 
     assert exit_code == 0
     payload = json.loads(out_path.read_text())
     assert {t["name"] for t in payload["teams"]} == {"India", "Australia"}
-    assert "2 teams" in capsys.readouterr().out
+    dashboard = json.loads(dashboard_path.read_text())
+    assert len(dashboard["worldcup"]["teams"]) == 20
+    assert dashboard["upcoming"] == [] and dashboard["track_record"] is None
+    out = capsys.readouterr().out
+    assert "2 teams" in out and "dashboard" in out
 
 
 def test_export_web_fails_cleanly_without_data(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("CWC27_DATA_DIR", str(tmp_path / "data"))
 
-    exit_code = main(["export-web", "--out", str(tmp_path / "ratings.json")])
+    exit_code = main(
+        [
+            "export-web",
+            "--out",
+            str(tmp_path / "ratings.json"),
+            "--dashboard-out",
+            str(tmp_path / "dashboard.json"),
+        ]
+    )
 
     assert exit_code == 1
     assert "cwc27 ingest" in capsys.readouterr().err

@@ -73,7 +73,7 @@ cwc27 ingest --download
 | `cwc27 ingest [--download]` | Load Cricsheet ODIs (and `data/manual/*.csv`) into the database |
 | `cwc27 result DATE TEAM_A TEAM_B --winner TEAM [--runs N or --wickets N] [--dls]` | Record a finished match Cricsheet hasn't published yet. Use `--tie` or `--no-result` instead of `--winner` when needed |
 | `cwc27 update [--download]` | Ingest, re-rate, score the prediction log and predict upcoming fixtures |
-| `cwc27 export-web` | Write the latest ratings to `web/data/ratings.json` for the website |
+| `cwc27 export-web` | Write the latest ratings to `web/data/ratings.json` and the dashboard data (ratings over time, predictions, track record, World Cup odds) to `web/data/dashboard.json` |
 | `cwc27 backtest [--k K] [--home-advantage H]` | Score Elo and the baselines on past ODIs |
 | `cwc27 tune` | Grid-search Elo settings and confirm them on recent matches |
 | `cwc27 squads [--team TEAM] [--as-of DATE]` | Predict each World Cup team's squad of 15. Certain picks are kept in `config/certain_picks.csv` |
@@ -84,7 +84,8 @@ cwc27 ingest --download
 
 GitHub Actions runs the tests on every push. A daily job (00:30 UTC) also runs
 `cwc27 update --download` and `cwc27 export-web`, then commits any change to the prediction log
-or the website's ratings. Matches that Cricsheet hasn't published yet still need
+or the website's data. `web/` is published with GitHub Pages after each change and each daily
+run. The dashboard is `web/dashboard.html`. Matches that Cricsheet hasn't published yet still need
 `cwc27 result`, as below.
 
 ### After each match
