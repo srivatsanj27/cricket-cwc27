@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-06T14:54:40.553724+00:00",
-  "ratings_through": "2026-10-05",
-  "matches_rated": 940,
+  "generated_at": "2026-10-15T04:57:37.828503+00:00",
+  "ratings_through": "2026-10-13",
+  "matches_rated": 947,
   "elo": {
     "home_advantage": 80.0,
     "scale": 400.0
@@ -75,8 +75,8 @@
     },
     {
       "name": "United States of America",
-      "rating": 1383.4,
-      "matches": 31,
+      "rating": 1375.5,
+      "matches": 34,
       "full_member": false
     },
     {
@@ -92,39 +92,39 @@
       "full_member": false
     },
     {
+      "name": "Nepal",
+      "rating": 1318.6,
+      "matches": 37,
+      "full_member": false
+    },
+    {
       "name": "Zimbabwe",
       "rating": 1312.7,
       "matches": 23,
       "full_member": true
     },
     {
-      "name": "Nepal",
-      "rating": 1295.3,
-      "matches": 35,
-      "full_member": false
-    },
-    {
       "name": "Namibia",
-      "rating": 1277.9,
-      "matches": 35,
+      "rating": 1300.9,
+      "matches": 38,
       "full_member": false
     },
     {
       "name": "Oman",
-      "rating": 1271.1,
-      "matches": 28,
-      "full_member": false
-    },
-    {
-      "name": "United Arab Emirates",
-      "rating": 1219.1,
+      "rating": 1264.0,
       "matches": 30,
       "full_member": false
     },
     {
+      "name": "United Arab Emirates",
+      "rating": 1203.9,
+      "matches": 32,
+      "full_member": false
+    },
+    {
       "name": "Canada",
-      "rating": 1198.4,
-      "matches": 31,
+      "rating": 1182.2,
+      "matches": 33,
       "full_member": false
     }
   ],
