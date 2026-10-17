@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T04:57:40.726860+00:00",
+  "generated_at": "2026-10-17T04:46:28.822437+00:00",
   "ratings_through": "2026-10-13",
   "timeline": {
     "since": "2023-11-20",
@@ -2735,7 +2735,7 @@
       "team_b": "Sri Lanka",
       "home": "Pakistan",
       "p_team_a": 0.6567,
-      "locked": false
+      "locked": true
     },
     {
       "date": "2026-10-20",
