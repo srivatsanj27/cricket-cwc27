@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T04:57:37.828503+00:00",
+  "generated_at": "2026-10-18T04:52:44.848651+00:00",
   "ratings_through": "2026-10-13",
   "matches_rated": 947,
   "elo": {
@@ -403,6 +403,10 @@
     },
     {
       "city": "Al Amarat",
+      "country": "Oman"
+    },
+    {
+      "city": "Al Amerat",
       "country": "Oman"
     },
     {
