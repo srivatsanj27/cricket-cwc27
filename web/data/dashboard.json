@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-17T04:46:28.822437+00:00",
-  "ratings_through": "2026-10-13",
+  "generated_at": "2026-10-19T05:01:43.644959+00:00",
+  "ratings_through": "2026-10-18",
   "timeline": {
     "since": "2023-11-20",
     "teams": {
@@ -1748,6 +1748,10 @@
         [
           "2026-06-04",
           1560.6
+        ],
+        [
+          "2026-10-18",
+          1569.2
         ]
       ],
       "Scotland": [
@@ -2186,6 +2190,10 @@
         [
           "2026-09-27",
           1527.9
+        ],
+        [
+          "2026-10-18",
+          1519.3
         ]
       ],
       "United Arab Emirates": [
@@ -2728,16 +2736,6 @@
   },
   "upcoming": [
     {
-      "date": "2026-10-18",
-      "series": "Pakistan ODI Tri-Series 2026-27",
-      "match_no": 1,
-      "team_a": "Pakistan",
-      "team_b": "Sri Lanka",
-      "home": "Pakistan",
-      "p_team_a": 0.6567,
-      "locked": true
-    },
-    {
       "date": "2026-10-20",
       "series": "Pakistan ODI Tri-Series 2026-27",
       "match_no": 2,
@@ -2745,7 +2743,7 @@
       "team_b": "England",
       "home": "Pakistan",
       "p_team_a": 0.6646,
-      "locked": false
+      "locked": true
     },
     {
       "date": "2026-10-22",
@@ -2754,7 +2752,7 @@
       "team_a": "England",
       "team_b": "Sri Lanka",
       "home": null,
-      "p_team_a": 0.4912,
+      "p_team_a": 0.5036,
       "locked": false
     },
     {
@@ -2764,7 +2762,7 @@
       "team_a": "Pakistan",
       "team_b": "England",
       "home": "Pakistan",
-      "p_team_a": 0.6646,
+      "p_team_a": 0.6755,
       "locked": false
     },
     {
@@ -2774,7 +2772,7 @@
       "team_a": "Pakistan",
       "team_b": "Sri Lanka",
       "home": "Pakistan",
-      "p_team_a": 0.6567,
+      "p_team_a": 0.6787,
       "locked": false
     },
     {
@@ -2784,7 +2782,7 @@
       "team_a": "England",
       "team_b": "Sri Lanka",
       "home": null,
-      "p_team_a": 0.4912,
+      "p_team_a": 0.5036,
       "locked": false
     },
     {
@@ -2838,170 +2836,195 @@
       "locked": false
     }
   ],
-  "results": [],
-  "track_record": null,
+  "results": [
+    {
+      "date": "2026-10-18",
+      "series": "Pakistan ODI Tri-Series 2026-27",
+      "team_a": "Pakistan",
+      "team_b": "Sri Lanka",
+      "p_team_a": 0.6567,
+      "winner": "Pakistan",
+      "result_type": "normal",
+      "brier": 0.1178
+    }
+  ],
+  "track_record": {
+    "matches": 1,
+    "brier": 0.1178,
+    "log_loss": 0.4205,
+    "accuracy": 1.0,
+    "calibration": [
+      {
+        "lower": 0.6,
+        "upper": 0.7,
+        "count": 1,
+        "mean_predicted": 0.6567,
+        "observed_rate": 1.0
+      }
+    ]
+  },
   "worldcup": {
-    "rating_sd": 99.0,
-    "days_ahead": 354,
+    "rating_sd": 98.6,
+    "days_ahead": 349,
     "start": "2027-10-02",
     "teams": [
       {
         "name": "South Africa",
         "group_stage": 1.0,
-        "super7": 0.8226,
-        "semi_final": 0.6174,
-        "final": 0.3606,
-        "champion": 0.2045
+        "super7": 0.824,
+        "semi_final": 0.616,
+        "final": 0.3605,
+        "champion": 0.2026
       },
       {
         "name": "India",
         "group_stage": 1.0,
-        "super7": 0.8036,
-        "semi_final": 0.5806,
-        "final": 0.3321,
-        "champion": 0.1848
+        "super7": 0.802,
+        "semi_final": 0.5812,
+        "final": 0.3297,
+        "champion": 0.1808
       },
       {
         "name": "New Zealand",
         "group_stage": 1.0,
-        "super7": 0.7944,
-        "semi_final": 0.5691,
-        "final": 0.3113,
-        "champion": 0.1687
+        "super7": 0.7978,
+        "semi_final": 0.5701,
+        "final": 0.313,
+        "champion": 0.1713
       },
       {
         "name": "Australia",
         "group_stage": 1.0,
-        "super7": 0.7338,
-        "semi_final": 0.4718,
-        "final": 0.2436,
-        "champion": 0.1221
-      },
-      {
-        "name": "Afghanistan",
-        "group_stage": 1.0,
-        "super7": 0.6426,
-        "semi_final": 0.3632,
-        "final": 0.1692,
-        "champion": 0.0768
+        "super7": 0.7305,
+        "semi_final": 0.4692,
+        "final": 0.2419,
+        "champion": 0.1216
       },
       {
         "name": "Pakistan",
         "group_stage": 1.0,
-        "super7": 0.6436,
-        "semi_final": 0.3638,
-        "final": 0.17,
-        "champion": 0.0741
+        "super7": 0.6577,
+        "semi_final": 0.3834,
+        "final": 0.1833,
+        "champion": 0.0844
       },
       {
-        "name": "Sri Lanka",
+        "name": "Afghanistan",
         "group_stage": 1.0,
-        "super7": 0.5727,
-        "semi_final": 0.2806,
-        "final": 0.1236,
-        "champion": 0.0543
+        "super7": 0.6398,
+        "semi_final": 0.362,
+        "final": 0.1688,
+        "champion": 0.0772
       },
       {
         "name": "England",
         "group_stage": 1.0,
-        "super7": 0.5513,
-        "semi_final": 0.2647,
-        "final": 0.1172,
-        "champion": 0.051
+        "super7": 0.5564,
+        "semi_final": 0.2667,
+        "final": 0.1177,
+        "champion": 0.0506
+      },
+      {
+        "name": "Sri Lanka",
+        "group_stage": 1.0,
+        "super7": 0.558,
+        "semi_final": 0.2665,
+        "final": 0.1144,
+        "champion": 0.0478
       },
       {
         "name": "Bangladesh",
         "group_stage": 1.0,
-        "super7": 0.4238,
-        "semi_final": 0.1683,
-        "final": 0.0609,
-        "champion": 0.0246
+        "super7": 0.4282,
+        "semi_final": 0.1674,
+        "final": 0.0603,
+        "champion": 0.0249
       },
       {
         "name": "West Indies",
-        "group_stage": 0.4483,
-        "super7": 0.2025,
-        "semi_final": 0.0797,
-        "final": 0.0322,
-        "champion": 0.0125
+        "group_stage": 0.4488,
+        "super7": 0.2018,
+        "semi_final": 0.0799,
+        "final": 0.0329,
+        "champion": 0.0127
       },
       {
         "name": "Scotland",
-        "group_stage": 0.3686,
-        "super7": 0.1492,
-        "semi_final": 0.0532,
-        "final": 0.0211,
-        "champion": 0.0078
+        "group_stage": 0.3685,
+        "super7": 0.1488,
+        "semi_final": 0.0535,
+        "final": 0.0205,
+        "champion": 0.0072
       },
       {
         "name": "Zimbabwe",
         "group_stage": 1.0,
-        "super7": 0.2707,
-        "semi_final": 0.0746,
-        "final": 0.023,
-        "champion": 0.007
+        "super7": 0.2682,
+        "semi_final": 0.0731,
+        "final": 0.022,
+        "champion": 0.0067
       },
       {
         "name": "United States of America",
-        "group_stage": 0.2796,
-        "super7": 0.1068,
+        "group_stage": 0.2789,
+        "super7": 0.1061,
         "semi_final": 0.0335,
-        "final": 0.0105,
-        "champion": 0.0036
+        "final": 0.0104,
+        "champion": 0.004
       },
       {
         "name": "Namibia",
-        "group_stage": 0.1758,
-        "super7": 0.0743,
-        "semi_final": 0.0273,
-        "final": 0.0088,
-        "champion": 0.003
+        "group_stage": 0.176,
+        "super7": 0.0738,
+        "semi_final": 0.0269,
+        "final": 0.0085,
+        "champion": 0.0028
       },
       {
         "name": "Ireland",
-        "group_stage": 0.2002,
-        "super7": 0.0637,
-        "semi_final": 0.0174,
+        "group_stage": 0.2001,
+        "super7": 0.0631,
+        "semi_final": 0.0169,
         "final": 0.0051,
-        "champion": 0.0022
+        "champion": 0.0021
       },
       {
         "name": "Netherlands",
-        "group_stage": 0.1908,
-        "super7": 0.0592,
-        "semi_final": 0.0163,
-        "final": 0.006,
+        "group_stage": 0.1911,
+        "super7": 0.0588,
+        "semi_final": 0.016,
+        "final": 0.0059,
         "champion": 0.0015
       },
       {
         "name": "Nepal",
-        "group_stage": 0.1629,
-        "super7": 0.0497,
-        "semi_final": 0.0131,
-        "final": 0.004,
-        "champion": 0.0013
-      },
-      {
-        "name": "Canada",
-        "group_stage": 0.0353,
-        "super7": 0.0053,
-        "semi_final": 0.0007,
-        "final": 0.0002,
-        "champion": 0.0001
+        "group_stage": 0.1627,
+        "super7": 0.0493,
+        "semi_final": 0.0124,
+        "final": 0.0042,
+        "champion": 0.0014
       },
       {
         "name": "Oman",
-        "group_stage": 0.0918,
-        "super7": 0.0215,
-        "semi_final": 0.0037,
-        "final": 0.0005,
+        "group_stage": 0.0919,
+        "super7": 0.0216,
+        "semi_final": 0.0034,
+        "final": 0.0007,
+        "champion": 0.0003
+      },
+      {
+        "name": "Canada",
+        "group_stage": 0.0351,
+        "super7": 0.0052,
+        "semi_final": 0.0008,
+        "final": 0.0001,
         "champion": 0.0001
       },
       {
         "name": "United Arab Emirates",
-        "group_stage": 0.0467,
-        "super7": 0.0087,
-        "semi_final": 0.001,
+        "group_stage": 0.0469,
+        "super7": 0.0089,
+        "semi_final": 0.0011,
         "final": 0.0001,
         "champion": 0.0
       }

@@ -1,10 +1,10 @@
 fixture_key,date,series,match_no,team_a,team_b,home,p_team_a,model,predicted_at,result_type,winner,actual_a,brier,scored_at
-2026-10-18_pakistan_sri-lanka,2026-10-18,Pakistan ODI Tri-Series 2026-27,1,Pakistan,Sri Lanka,Pakistan,0.6567404677068676,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
+2026-10-18_pakistan_sri-lanka,2026-10-18,Pakistan ODI Tri-Series 2026-27,1,Pakistan,Sri Lanka,Pakistan,0.6567404677068676,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,normal,Pakistan,1.0,0.11782710651010003,2026-10-19T05:01:40.324712+00:00
 2026-10-20_england_pakistan,2026-10-20,Pakistan ODI Tri-Series 2026-27,2,Pakistan,England,Pakistan,0.6646131938951712,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
-2026-10-22_england_sri-lanka,2026-10-22,Pakistan ODI Tri-Series 2026-27,3,England,Sri Lanka,,0.49122125269682554,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
-2026-10-25_england_pakistan,2026-10-25,Pakistan ODI Tri-Series 2026-27,4,Pakistan,England,Pakistan,0.6646131938951712,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
-2026-10-27_pakistan_sri-lanka,2026-10-27,Pakistan ODI Tri-Series 2026-27,5,Pakistan,Sri Lanka,Pakistan,0.6567404677068676,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
-2026-10-29_england_sri-lanka,2026-10-29,Pakistan ODI Tri-Series 2026-27,6,England,Sri Lanka,,0.49122125269682554,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
+2026-10-22_england_sri-lanka,2026-10-22,Pakistan ODI Tri-Series 2026-27,3,England,Sri Lanka,,0.5035700442057244,elo-k25-h80,2026-10-19T05:01:40.324712+00:00,,,,,
+2026-10-25_england_pakistan,2026-10-25,Pakistan ODI Tri-Series 2026-27,4,Pakistan,England,Pakistan,0.6755333380020316,elo-k25-h80,2026-10-19T05:01:40.324712+00:00,,,,,
+2026-10-27_pakistan_sri-lanka,2026-10-27,Pakistan ODI Tri-Series 2026-27,5,Pakistan,Sri Lanka,Pakistan,0.6786555557760809,elo-k25-h80,2026-10-19T05:01:40.324712+00:00,,,,,
+2026-10-29_england_sri-lanka,2026-10-29,Pakistan ODI Tri-Series 2026-27,6,England,Sri Lanka,,0.5035700442057244,elo-k25-h80,2026-10-19T05:01:40.324712+00:00,,,,,
 2026-11-04_india_new-zealand,2026-11-04,India tour of New Zealand 2026-27,1,New Zealand,India,New Zealand,0.6040145895723767,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
 2026-11-07_india_new-zealand,2026-11-07,India tour of New Zealand 2026-27,2,New Zealand,India,New Zealand,0.6040145895723767,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,
 2026-11-10_india_new-zealand,2026-11-10,India tour of New Zealand 2026-27,3,New Zealand,India,New Zealand,0.6040145895723767,elo-k25-h80,2026-10-07T12:19:28.562987+00:00,,,,,

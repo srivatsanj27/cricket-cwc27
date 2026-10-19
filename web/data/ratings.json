@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-18T04:52:44.848651+00:00",
-  "ratings_through": "2026-10-13",
-  "matches_rated": 947,
+  "generated_at": "2026-10-19T05:01:40.776380+00:00",
+  "ratings_through": "2026-10-18",
+  "matches_rated": 948,
   "elo": {
     "home_advantage": 80.0,
     "scale": 400.0
@@ -32,27 +32,27 @@
       "full_member": true
     },
     {
+      "name": "Pakistan",
+      "rating": 1569.2,
+      "matches": 33,
+      "full_member": true
+    },
+    {
       "name": "Afghanistan",
       "rating": 1562.4,
       "matches": 27,
       "full_member": true
     },
     {
-      "name": "Pakistan",
-      "rating": 1560.6,
-      "matches": 32,
+      "name": "England",
+      "rating": 1521.8,
+      "matches": 35,
       "full_member": true
     },
     {
       "name": "Sri Lanka",
-      "rating": 1527.9,
-      "matches": 38,
-      "full_member": true
-    },
-    {
-      "name": "England",
-      "rating": 1521.8,
-      "matches": 35,
+      "rating": 1519.3,
+      "matches": 39,
       "full_member": true
     },
     {
