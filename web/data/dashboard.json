@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T05:05:57.327755+00:00",
+  "generated_at": "2026-10-24T04:52:03.066672+00:00",
   "ratings_through": "2026-10-18",
   "timeline": {
     "since": "2023-11-20",
@@ -2763,7 +2763,7 @@
       "team_b": "England",
       "home": "Pakistan",
       "p_team_a": 0.6755,
-      "locked": false
+      "locked": true
     },
     {
       "date": "2026-10-27",
