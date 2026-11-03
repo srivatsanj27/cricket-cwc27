@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T05:59:50.925075+00:00",
+  "generated_at": "2026-11-03T07:04:03.206948+00:00",
   "ratings_through": "2026-10-25",
   "timeline": {
     "since": "2023-11-20",
@@ -2843,7 +2843,7 @@
       "team_b": "India",
       "home": "New Zealand",
       "p_team_a": 0.604,
-      "locked": false
+      "locked": true
     },
     {
       "date": "2026-11-07",
