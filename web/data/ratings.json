@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-26T05:05:27.643232+00:00",
-  "ratings_through": "2026-10-25",
-  "matches_rated": 958,
+  "generated_at": "2026-11-04T06:48:02.546498+00:00",
+  "ratings_through": "2026-11-02",
+  "matches_rated": 968,
   "elo": {
     "home_advantage": 80.0,
     "scale": 400.0
@@ -26,15 +26,15 @@
       "full_member": true
     },
     {
-      "name": "Pakistan",
-      "rating": 1584.6,
+      "name": "South Africa",
+      "rating": 1579.0,
       "matches": 35,
       "full_member": true
     },
     {
-      "name": "South Africa",
-      "rating": 1579.0,
-      "matches": 35,
+      "name": "Pakistan",
+      "rating": 1576.1,
+      "matches": 37,
       "full_member": true
     },
     {
@@ -45,14 +45,14 @@
     },
     {
       "name": "Sri Lanka",
-      "rating": 1531.6,
-      "matches": 40,
+      "rating": 1525.7,
+      "matches": 43,
       "full_member": true
     },
     {
       "name": "England",
-      "rating": 1494.2,
-      "matches": 38,
+      "rating": 1508.6,
+      "matches": 39,
       "full_member": true
     },
     {
@@ -81,20 +81,20 @@
     },
     {
       "name": "Netherlands",
-      "rating": 1346.2,
-      "matches": 30,
+      "rating": 1347.8,
+      "matches": 33,
       "full_member": false
-    },
-    {
-      "name": "Ireland",
-      "rating": 1337.8,
-      "matches": 20,
-      "full_member": true
     },
     {
       "name": "Zimbabwe",
       "rating": 1330.5,
       "matches": 24,
+      "full_member": true
+    },
+    {
+      "name": "Ireland",
+      "rating": 1330.2,
+      "matches": 23,
       "full_member": true
     },
     {
@@ -105,14 +105,14 @@
     },
     {
       "name": "Namibia",
-      "rating": 1298.7,
-      "matches": 40,
+      "rating": 1306.3,
+      "matches": 43,
       "full_member": false
     },
     {
-      "name": "Oman",
-      "rating": 1232.7,
-      "matches": 32,
+      "name": "United Arab Emirates",
+      "rating": 1219.0,
+      "matches": 35,
       "full_member": false
     },
     {
@@ -122,9 +122,9 @@
       "full_member": false
     },
     {
-      "name": "United Arab Emirates",
-      "rating": 1193.2,
-      "matches": 33,
+      "name": "Oman",
+      "rating": 1205.2,
+      "matches": 35,
       "full_member": false
     }
   ],
