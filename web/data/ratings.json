@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-04T06:48:02.546498+00:00",
-  "ratings_through": "2026-11-02",
-  "matches_rated": 968,
+  "generated_at": "2026-11-26T08:42:06.311280+00:00",
+  "ratings_through": "2026-11-22",
+  "matches_rated": 977,
   "elo": {
     "home_advantage": 80.0,
     "scale": 400.0
@@ -9,20 +9,14 @@
   "teams": [
     {
       "name": "India",
-      "rating": 1647.3,
-      "matches": 32,
+      "rating": 1678.4,
+      "matches": 36,
       "full_member": true
     },
     {
       "name": "New Zealand",
-      "rating": 1640.6,
-      "matches": 37,
-      "full_member": true
-    },
-    {
-      "name": "Australia",
-      "rating": 1599.6,
-      "matches": 34,
+      "rating": 1609.5,
+      "matches": 41,
       "full_member": true
     },
     {
@@ -38,21 +32,27 @@
       "full_member": true
     },
     {
+      "name": "Australia",
+      "rating": 1573.0,
+      "matches": 37,
+      "full_member": true
+    },
+    {
       "name": "Afghanistan",
       "rating": 1562.4,
       "matches": 27,
       "full_member": true
     },
     {
-      "name": "Sri Lanka",
-      "rating": 1525.7,
-      "matches": 43,
+      "name": "England",
+      "rating": 1535.3,
+      "matches": 42,
       "full_member": true
     },
     {
-      "name": "England",
-      "rating": 1508.6,
-      "matches": 39,
+      "name": "Sri Lanka",
+      "rating": 1525.7,
+      "matches": 43,
       "full_member": true
     },
     {
@@ -99,8 +99,8 @@
     },
     {
       "name": "Nepal",
-      "rating": 1315.3,
-      "matches": 39,
+      "rating": 1324.8,
+      "matches": 40,
       "full_member": false
     },
     {
@@ -111,8 +111,8 @@
     },
     {
       "name": "United Arab Emirates",
-      "rating": 1219.0,
-      "matches": 35,
+      "rating": 1218.8,
+      "matches": 37,
       "full_member": false
     },
     {
@@ -123,8 +123,8 @@
     },
     {
       "name": "Oman",
-      "rating": 1205.2,
-      "matches": 35,
+      "rating": 1196.0,
+      "matches": 36,
       "full_member": false
     }
   ],
